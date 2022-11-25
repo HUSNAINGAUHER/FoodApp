@@ -1,6 +1,7 @@
 import { PillButton } from '@/compoenents/PillButton'
 import { Page } from '@/layouts/Page'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 export const items = [
   {
@@ -115,6 +116,7 @@ export const items = [
   },
 ]
 const Index = () => {
+  const { push } = useRouter()
   return (
     <Page name='Dashboard'>
       <div className='mt-0'>
@@ -148,7 +150,7 @@ const Index = () => {
             })}
           </div>
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
-            <PillButton name='Card(3/5) - Place Order' />
+            <PillButton name='Card(3/5) - Place Order' onClick={() => push('complete')} />
           </div>
         </div>
       </div>
