@@ -23,7 +23,9 @@
     "next": "^13.0.0",
     "next-seo": "^5.8.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-grid-carousel": "^1.0.1",
+    "react-multi-carousel": "^2.8.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

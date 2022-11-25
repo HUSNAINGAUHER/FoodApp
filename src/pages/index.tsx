@@ -1,186 +1,235 @@
-import { useRouter } from 'next/router';
+import { PillButton } from '@/compoenents/PillButton'
+import { Page } from '@/layouts/Page'
+import Image from 'next/image'
 
-import { Meta } from '@/layouts/Meta';
-import { Main } from '@/templates/Main';
-
+export const items = [
+  {
+    image: '0777 1 (0).png',
+    name: 'Lemon',
+    key: '1',
+  },
+  {
+    image: '0777 1 (1).png',
+    name: 'Apple',
+    key: '2',
+  },
+  {
+    image: '0777 1 (2).png',
+    name: 'Apple Juice',
+    key: '3',
+  },
+  {
+    image: '0777 1 (3).png',
+    name: 'Apple Sauce',
+    key: '4',
+  },
+  {
+    image: '0777 1 (4).png',
+    name: 'Appricot',
+    key: '5',
+  },
+  {
+    image: '0777 1 (5).png',
+    name: 'Banana',
+    key: '6',
+  },
+  {
+    image: '0777 1 (6).png',
+    name: 'Blackberries',
+    key: '7',
+  },
+  {
+    image: '0777 1 (7).png',
+    name: 'Blueberries',
+    key: '8',
+  },
+  {
+    image: '0777 1 (8).png',
+    name: 'Cantaloupe',
+    key: '9',
+  },
+  {
+    image: '0777 1 (9).png',
+    name: 'Cherries - dried',
+    key: '9',
+  },
+  {
+    image: '0777 1 (10).png',
+    name: 'Coconut',
+    key: '10',
+  },
+  {
+    image: '0777 1 (0).png',
+    name: 'Lemon',
+    key: '11',
+  },
+  {
+    image: '0777 1 (1).png',
+    name: 'Apple',
+    key: '12',
+  },
+  {
+    image: '0777 1 (2).png',
+    name: 'Apple Juice',
+    key: '13',
+  },
+  {
+    image: '0777 1 (3).png',
+    name: 'Apple Sauce',
+    key: '14',
+  },
+  {
+    image: '0777 1 (4).png',
+    name: 'Appricot',
+    key: '15',
+  },
+  {
+    image: '0777 1 (5).png',
+    name: 'Banana',
+    key: '16',
+  },
+  {
+    image: '0777 1 (6).png',
+    name: 'Blackberries',
+    key: '17',
+  },
+  {
+    image: '0777 1 (7).png',
+    name: 'Blueberries',
+    key: '18',
+  },
+  {
+    image: '0777 1 (8).png',
+    name: 'Cantaloupe',
+    key: '19',
+  },
+  {
+    image: '0777 1 (9).png',
+    name: 'Cherries - dried',
+    key: '20',
+  },
+  {
+    image: '0777 1 (10).png',
+    name: 'Coconut',
+    key: '21',
+  },
+]
 const Index = () => {
-  const router = useRouter();
-
   return (
-    <Main
-      meta={
-        <Meta
-          title="Next.js Boilerplate Presentation"
-          description="Next js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework."
-        />
-      }
-    >
-      <a href="https://github.com/ixartz/Next-js-Boilerplate">
-        <img
-          src={`${router.basePath}/assets/images/nextjs-starter-banner.png`}
-          alt="Nextjs starter banner"
-        />
-      </a>
-      <h1 className="text-2xl font-bold">
-        Boilerplate code for your Nextjs project with Tailwind CSS
-      </h1>
-      <p>
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>{' '}
-        Next.js Boilerplate is a starter code for your Next js project by
-        putting developer experience first .{' '}
-        <span role="img" aria-label="zap">
-          ⚡️
-        </span>{' '}
-        Made with Next.js, TypeScript, ESLint, Prettier, Husky, Lint-Staged,
-        VSCode, Netlify, PostCSS, Tailwind CSS.
-      </p>
-      <h2 className="text-lg font-semibold">Next js Boilerplate Features</h2>
-      <p>Developer experience first:</p>
-      <ul>
-        <li>
-          <span role="img" aria-label="fire">
-            🔥
-          </span>{' '}
-          <a href="https://nextjs.org" rel="nofollow">
-            Next.js
-          </a>{' '}
-          for Static Site Generator
-        </li>
-        <li>
-          <span role="img" aria-label="art">
-            🎨
-          </span>{' '}
-          Integrate with{' '}
-          <a href="https://tailwindcss.com" rel="nofollow">
-            Tailwind CSS
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="nail_care">
-            💅
-          </span>{' '}
-          PostCSS for processing Tailwind CSS
-        </li>
-        <li>
-          <span role="img" aria-label="tada">
-            🎉
-          </span>{' '}
-          Type checking Typescript
-        </li>
-        <li>
-          <span role="img" aria-label="pencil2">
-            ✏️
-          </span>{' '}
-          Linter with{' '}
-          <a href="https://eslint.org" rel="nofollow">
-            ESLint
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="hammer_and_wrench">
-            🛠
-          </span>{' '}
-          Code Formatter with{' '}
-          <a href="https://prettier.io" rel="nofollow">
-            Prettier
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="fox_face">
-            🦊
-          </span>{' '}
-          Husky for Git Hooks
-        </li>
-        <li>
-          <span role="img" aria-label="no_entry_sign">
-            🚫
-          </span>{' '}
-          Lint-staged for running linters on Git staged files
-        </li>
-        <li>
-          <span role="img" aria-label="no_entry_sign">
-            🗂
-          </span>{' '}
-          VSCode configuration: Debug, Settings, Tasks and extension for
-          PostCSS, ESLint, Prettier, TypeScript
-        </li>
-        <li>
-          <span role="img" aria-label="robot">
-            🤖
-          </span>{' '}
-          SEO metadata, JSON-LD and Open Graph tags with Next SEO
-        </li>
-        <li>
-          <span role="img" aria-label="robot">
-            ⚙️
-          </span>{' '}
-          <a
-            href="https://www.npmjs.com/package/@next/bundle-analyzer"
-            rel="nofollow"
-          >
-            Bundler Analyzer
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="rainbow">
-            🌈
-          </span>{' '}
-          Include a FREE minimalist theme
-        </li>
-        <li>
-          <span role="img" aria-label="hundred">
-            💯
-          </span>{' '}
-          Maximize lighthouse score
-        </li>
-      </ul>
-      <p>Built-in feature from Next.js:</p>
-      <ul>
-        <li>
-          <span role="img" aria-label="coffee">
-            ☕
-          </span>{' '}
-          Minify HTML &amp; CSS
-        </li>
-        <li>
-          <span role="img" aria-label="dash">
-            💨
-          </span>{' '}
-          Live reload
-        </li>
-        <li>
-          <span role="img" aria-label="white_check_mark">
-            ✅
-          </span>{' '}
-          Cache busting
-        </li>
-      </ul>
-      <h2 className="text-lg font-semibold">Our Stater code Philosophy</h2>
-      <ul>
-        <li>Minimal code</li>
-        <li>SEO-friendly</li>
-        <li>
-          <span role="img" aria-label="rocket">
-            🚀
-          </span>{' '}
-          Production-ready
-        </li>
-      </ul>
-      <p>
-        Check our GitHub project for more information about{' '}
-        <a href="https://github.com/ixartz/Next-js-Boilerplate">
-          Nextjs Boilerplate
-        </a>
-        . You can also browse our{' '}
-        <a href="https://creativedesignsguru.com/category/nextjs/">
-          Premium NextJS Templates
-        </a>{' '}
-        on our website to support this project.
-      </p>
-    </Main>
-  );
-};
+    <Page name='Dashboard'>
+      <div className='mt-0'>
+        <div className='flex justify-between' style={{ paddingTop: '65px' }}>
+          <div className='text-4xl font-semibold'>Food Categories</div>
+          <input
+            type='text'
+            placeholder='Search Food Items... '
+            style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
+          />
+        </div>
+        <div className='flex gap-5 justify-between' style={{ marginTop: '40px' }}>
+          <CarouselItem image='/assets/images/S1.svg' name='FRUITS' />
+          <CarouselItem image='/assets/images/G3.png' name='VEGETABLES' />
+          <CarouselItem image='/assets/images/Steak.svg' name='MEAT' />
+          <CarouselItem image='/assets/images/G1.svg' name='Dairy' />
+          <CarouselItem image='/assets/images/G2.svg' name='DRY GOODS' />
+          <CarouselItem image='/assets/images/Dinner.svg' name='MEAL' />
+          <CarouselItem image='/assets/images/Snack.svg' name='SNACK' />
+          <CarouselItem image='/assets/images/Mother.svg' name='BABY SUPPLIES' />
+        </div>
 
-export default Index;
+        <div style={{ marginTop: '48px' }}>
+          <div className='text-4xl font-semibold'>Fruits</div>
+          <div
+            className='grid grid-cols-5 place-items-stretch gap-10'
+            style={{ rowGap: '25px', marginTop: '25px' }}
+          >
+            {items.map((I) => {
+              return <ListingItem image={`/assets/images/${I.image}`} key='1' name={I.name} />
+            })}
+          </div>
+          <div className='flex justify-end' style={{ marginTop: '44px' }}>
+            <PillButton name='Card(3/5) - Place Order' />
+          </div>
+        </div>
+      </div>
+    </Page>
+  )
+}
+
+type Props = {
+  image: string
+  name: string
+  onClick?: () => void
+}
+const CarouselItem = ({ image, name }: Props) => {
+  return (
+    <div
+      className='bg-white w-max h-max flex flex-col items-center justify-center text-center rounded-xl'
+      style={{ width: '118px', height: '98px' }}
+    >
+      <Image src={image} height={40} width={40} alt='' />
+      <div className='font-sm font-medium' style={{ marginTop: '11px' }}>
+        {name}
+      </div>
+    </div>
+  )
+}
+
+type ListingItemProps = {
+  image: string
+  name: string
+  key: string
+  selected?: boolean
+  onClick?: () => void
+}
+
+const ListingItem = ({ image, name, selected }: ListingItemProps) => {
+  return (
+    <div
+      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl'
+      style={{ height: '197px', padding: '13px' }}
+    >
+      <Image
+        style={{ width: '200px', height: '130px' }}
+        src={image}
+        height={130}
+        width={200}
+        alt=''
+      />
+      <div className='flex justify-between items-center w-full' style={{ marginTop: '16px' }}>
+        <div className='font-base'>{name}</div>
+        <div className='cursor-pointer'>
+          {!selected ? (
+            <div className='bg-black rounded-full p-1'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={4}
+                stroke='currentColor'
+                className='w-3 h-3 text-white'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+              </svg>
+            </div>
+          ) : (
+            <div className='bg-blue-100 rounded-full p-1'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={4}
+                stroke='currentColor'
+                className='w-3 h-3 text-white'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 12.75l6 6 9-13.5' />
+              </svg>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Index
