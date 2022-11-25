@@ -15,7 +15,7 @@ export const Page = ({
     {!background && <Header name={name} />}
     <div
       style={{
-        width: !background ? '1400px' : 'auto',
+        width: !background ? '1250px' : 'auto',
         backgroundImage: background ? `url(${bg.src})` : 'none',
         minHeight: '100vh',
         backgroundSize: 'cover',
@@ -23,6 +23,7 @@ export const Page = ({
       className='mx-auto h-max'
     >
       <div className='w-full h-full'>{children}</div>
+     
     </div>
   </div>
 )

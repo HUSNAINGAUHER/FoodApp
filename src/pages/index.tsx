@@ -2,6 +2,8 @@ import { PillButton } from '@/compoenents/PillButton'
 import { Page } from '@/layouts/Page'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import Carousel from '@/compoenents/Slider'
+import { useEffect, useState } from 'react'
 
 export const items = [
   {
@@ -52,7 +54,7 @@ export const items = [
   {
     image: '0777 1 (9).png',
     name: 'Cherries - dried',
-    key: '9',
+    key: '119',
   },
   {
     image: '0777 1 (10).png',
@@ -115,12 +117,42 @@ export const items = [
     key: '21',
   },
 ]
+
+export const Categories = [
+  {
+    image: '/assets/images/S1.svg',
+    name: 'FRUITS',
+    id: 1,
+  },
+  { image: '/assets/images/G3.png', name: 'VEGETABLES', id: 2 },
+  { image: '/assets/images/Steak.svg', name: 'MEAT', id: 3 },
+  { image: '/assets/images/G1.svg', name: 'DAIRY', id: 4 },
+  { image: '/assets/images/G2.svg', name: 'DRY GOODS', id: 5 },
+  { image: '/assets/images/Dinner.svg', name: 'MEAL', id: 6 },
+  { image: '/assets/images/Snack.svg', name: 'SNACK', id: 7 },
+  { image: '/assets/images/Mother.svg', name: 'BABY SUPPLIES', id: 8 },
+  { image: '/assets/images/Steak.svg', name: 'MEAT', id: 9 },
+  { image: '/assets/images/G1.svg', name: 'DAIRY', id: 10 },
+  { image: '/assets/images/G2.svg', name: 'DRY GOODS', id: 11 },
+  { image: '/assets/images/Dinner.svg', name: 'MEAL', id: 12 },
+  { image: '/assets/images/Snack.svg', name: 'SNACK', id: 13 },
+  { image: '/assets/images/Mother.svg', name: 'BABY SUPPLIES', id: 14 },
+]
 const Index = () => {
   const { push } = useRouter()
+
+  const [selectedCategory, setSelectedCategory] = useState(1)
+
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+
+  useEffect(() => {
+    console.log(selectedItems.includes('1'))
+  }, [selectedItems])
+
   return (
     <Page name='Dashboard'>
       <div className='mt-0'>
-        <div className='flex justify-between' style={{ paddingTop: '65px' }}>
+        <div className='flex justify-between items-center' style={{ paddingTop: '65px' }}>
           <div className='text-4xl font-semibold'>Food Categories</div>
           <input
             type='text'
@@ -128,16 +160,19 @@ const Index = () => {
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
         </div>
-        <div className='flex gap-5 justify-between' style={{ marginTop: '40px' }}>
-          <CarouselItem image='/assets/images/S1.svg' name='FRUITS' />
-          <CarouselItem image='/assets/images/G3.png' name='VEGETABLES' />
-          <CarouselItem image='/assets/images/Steak.svg' name='MEAT' />
-          <CarouselItem image='/assets/images/G1.svg' name='Dairy' />
-          <CarouselItem image='/assets/images/G2.svg' name='DRY GOODS' />
-          <CarouselItem image='/assets/images/Dinner.svg' name='MEAL' />
-          <CarouselItem image='/assets/images/Snack.svg' name='SNACK' />
-          <CarouselItem image='/assets/images/Mother.svg' name='BABY SUPPLIES' />
-        </div>
+        <Carousel>
+          {Categories.map((C) => (
+            <CarouselItem
+              name={C.name}
+              image={C.image}
+              key={C.id}
+              selected={C.id === selectedCategory}
+              onClick={() => {
+                setSelectedCategory(C.id)
+              }}
+            />
+          ))}
+        </Carousel>
 
         <div style={{ marginTop: '48px' }}>
           <div className='text-4xl font-semibold'>Fruits</div>
@@ -146,7 +181,19 @@ const Index = () => {
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
             {items.map((I) => {
-              return <ListingItem image={`/assets/images/${I.image}`} key='1' name={I.name} />
+              return (
+                <ListingItem
+                  image={`/assets/images/${I.image}`}
+                  selected={selectedItems.includes(I.key)}
+                  key={I.key}
+                  name={I.name}
+                  onClick={() => {
+                    selectedItems.includes(I.key)
+                      ? setSelectedItems(selectedItems.filter((F) => F !== I.key))
+                      : setSelectedItems([...selectedItems, I.key])
+                  }}
+                />
+              )
             })}
           </div>
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
@@ -162,12 +209,16 @@ type Props = {
   image: string
   name: string
   onClick?: () => void
+  selected: boolean
 }
-const CarouselItem = ({ image, name }: Props) => {
+const CarouselItem = ({ image, name, selected, onClick }: Props) => {
   return (
     <div
-      className='bg-white w-max h-max flex flex-col items-center justify-center text-center rounded-xl'
-      style={{ width: '118px', height: '98px' }}
+      className={`bg-white w-max h-max flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
+        selected && 'border border-blue-100'
+      }`}
+      style={{ width: '125px', height: '98px' }}
+      onClick={onClick}
     >
       <Image src={image} height={40} width={40} alt='' />
       <div className='font-sm font-medium' style={{ marginTop: '11px' }}>
@@ -185,10 +236,10 @@ type ListingItemProps = {
   onClick?: () => void
 }
 
-const ListingItem = ({ image, name, selected }: ListingItemProps) => {
+const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
   return (
     <div
-      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl'
+      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl '
       style={{ height: '197px', padding: '13px' }}
     >
       <Image
@@ -200,7 +251,7 @@ const ListingItem = ({ image, name, selected }: ListingItemProps) => {
       />
       <div className='flex justify-between items-center w-full' style={{ marginTop: '16px' }}>
         <div className='font-base'>{name}</div>
-        <div className='cursor-pointer'>
+        <div className='cursor-pointer' onClick={onClick}>
           {!selected ? (
             <div className='bg-black rounded-full p-1'>
               <svg

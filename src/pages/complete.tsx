@@ -46,7 +46,7 @@ type ListingItemProps = {
   onClick?: () => void
 }
 
-const CheckoutListItem = ({ image, name }: ListingItemProps) => {
+export const CheckoutListItem = ({ image, name }: ListingItemProps) => {
   return (
     <div className='bg-white flex items-center justify-between px-2 py-2 border border-blue-100 rounded-xl w-full'>
       <div className='flex'>
