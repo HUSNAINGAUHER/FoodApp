@@ -1,9 +1,12 @@
 import { PillButton } from '@/compoenents/PillButton'
 import { Page } from '@/layouts/Page'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Carousel from '@/compoenents/Slider'
 import { useEffect, useState } from 'react'
+import { Service } from '@/axios/config'
+import { useQuery } from 'react-query'
+
+
 
 export const items = [
   {
@@ -118,36 +121,40 @@ export const items = [
   },
 ]
 
-export const Categories = [
-  {
-    image: '/assets/images/S1.svg',
-    name: 'FRUITS',
-    id: 1,
-  },
-  { image: '/assets/images/G3.png', name: 'VEGETABLES', id: 2 },
-  { image: '/assets/images/Steak.svg', name: 'MEAT', id: 3 },
-  { image: '/assets/images/G1.svg', name: 'DAIRY', id: 4 },
-  { image: '/assets/images/G2.svg', name: 'DRY GOODS', id: 5 },
-  { image: '/assets/images/Dinner.svg', name: 'MEAL', id: 6 },
-  { image: '/assets/images/Snack.svg', name: 'SNACK', id: 7 },
-  { image: '/assets/images/Mother.svg', name: 'BABY SUPPLIES', id: 8 },
-  { image: '/assets/images/Steak.svg', name: 'MEAT', id: 9 },
-  { image: '/assets/images/G1.svg', name: 'DAIRY', id: 10 },
-  { image: '/assets/images/G2.svg', name: 'DRY GOODS', id: 11 },
-  { image: '/assets/images/Dinner.svg', name: 'MEAL', id: 12 },
-  { image: '/assets/images/Snack.svg', name: 'SNACK', id: 13 },
-  { image: '/assets/images/Mother.svg', name: 'BABY SUPPLIES', id: 14 },
-]
+
+
+const useCategory = () => {
+  return useQuery('Categories',async () => {
+    const data = await Service.get('/category')
+    return JSON.parse(data.data)
+  })
+}
+
+const useProducts = (parent:string|undefined) => {
+  return useQuery(['Products',parent], async () => {
+    const data = await Service.get('/products/cat',{params:{
+      parent
+    }})
+    return JSON.parse(data.data)
+  },{enabled: !!parent})
+}
+
 const Index = () => {
   const { push } = useRouter()
-
-  const [selectedCategory, setSelectedCategory] = useState(1)
+  const {data:Categories} = useCategory()
+ 
+  const [selectedCategory, setSelectedCategory] = useState()
 
   const [selectedItems, setSelectedItems] = useState<string[]>([])
+   const { data: Products } = useProducts(selectedCategory)
+
 
   useEffect(() => {
-    console.log(selectedItems.includes('1'))
-  }, [selectedItems])
+    if(Categories) 
+    {
+      setSelectedCategory(Categories[0].parent)
+    }
+  }, [Categories])
 
   return (
     <Page name='Dashboard'>
@@ -160,19 +167,20 @@ const Index = () => {
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
         </div>
+        {Categories &&
         <Carousel>
-          {Categories.map((C) => (
+          {Categories?.map((C: any) => (
             <CarouselItem
-              name={C.name}
-              image={C.image}
-              key={C.id}
-              selected={C.id === selectedCategory}
+              name={C.parent}
+              image={C.icon}
+              key={C.parent}
+              selected={C.parent === selectedCategory}
               onClick={() => {
-                setSelectedCategory(C.id)
+                setSelectedCategory(C.parent)
               }}
             />
           ))}
-        </Carousel>
+        </Carousel>}
 
         <div style={{ marginTop: '48px' }}>
           <div className='text-4xl font-semibold'>Fruits</div>
@@ -180,17 +188,17 @@ const Index = () => {
             className='grid grid-cols-5 place-items-stretch gap-10'
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
-            {items.map((I) => {
+            {Products?.map((I:any) => {
               return (
                 <ListingItem
-                  image={`/assets/images/${I.image}`}
-                  selected={selectedItems.includes(I.key)}
-                  key={I.key}
-                  name={I.name}
+                  image={I.image}
+                  selected={selectedItems.includes(I._id)}
+                  key={I._id}
+                  name={I.title}
                   onClick={() => {
-                    selectedItems.includes(I.key)
-                      ? setSelectedItems(selectedItems.filter((F) => F !== I.key))
-                      : setSelectedItems([...selectedItems, I.key])
+                    selectedItems.includes(I._id)
+                      ? setSelectedItems(selectedItems.filter((F) => F !== I._id))
+                      : setSelectedItems([...selectedItems, I._id])
                   }}
                 />
               )
@@ -220,7 +228,7 @@ const CarouselItem = ({ image, name, selected, onClick }: Props) => {
       style={{ width: '125px', height: '98px' }}
       onClick={onClick}
     >
-      <Image src={image} height={40} width={40} alt='' />
+      <img src={image} height={40} width={40} alt='' />
       <div className='font-sm font-medium' style={{ marginTop: '11px' }}>
         {name}
       </div>
@@ -239,10 +247,11 @@ type ListingItemProps = {
 const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
   return (
     <div
-      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl '
+      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer'
       style={{ height: '197px', padding: '13px' }}
+      onClick={onClick}
     >
-      <Image
+      <img
         style={{ width: '200px', height: '130px' }}
         src={image}
         height={130}
@@ -251,7 +260,7 @@ const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
       />
       <div className='flex justify-between items-center w-full' style={{ marginTop: '16px' }}>
         <div className='font-base'>{name}</div>
-        <div className='cursor-pointer' onClick={onClick}>
+        <div className='cursor-pointer'>
           {!selected ? (
             <div className='bg-black rounded-full p-1'>
               <svg
