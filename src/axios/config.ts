@@ -1,5 +1,5 @@
-import  { Axios } from "axios";
+import  axios from "axios";
 
-export const Service = new Axios({
-  baseURL: 'https://foodappbackend.herokuapp.com/api',
+export const Service =  axios.create({
+  baseURL: 'https://foodappbackend.heroku.com/api'
 })

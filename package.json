@@ -20,12 +20,15 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "next": "^13.0.0",
     "next-seo": "^5.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-grid-carousel": "^1.0.1",
     "react-multi-carousel": "^2.8.2",
     "react-query": "^3.39.2",

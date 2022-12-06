@@ -1,6 +1,18 @@
 import { Page } from '@/layouts/Page'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const Success = () => {
+
+  const { query, push } = useRouter()
+
+  useEffect(() => {
+    if (!window.localStorage.getItem('token')) push('/login')
+  })
+  
+  useEffect(() => {
+    window.localStorage.setItem('cart',JSON.stringify([]))
+  },[])
   return (
     <>
       <Page name='Place Order'>
@@ -28,7 +40,7 @@ const Success = () => {
               style={{ marginTop: '11px' }}
               className='bg-gray-400 mx-auto px-8 py-2 border border-blue-100 rounded-xl w-max h-max'
             >
-              <div className='text-center mx-auto'>4233423</div>
+              <div className='text-center mx-auto'>{query['invoice']}</div>
             </div>
           </div>
         </div>

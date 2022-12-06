@@ -1,4 +1,6 @@
 import { Page } from '@/layouts/Page'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const pastOrders = [
   {
@@ -46,6 +48,13 @@ const pastOrders = [
 ]
 
 const Success = () => {
+
+  const {push} = useRouter()
+
+  useEffect(() => {
+    if (!window.localStorage.getItem('token')) push('/login')
+  })
+  
   return (
     <>
       <Page name='Past Orders'>

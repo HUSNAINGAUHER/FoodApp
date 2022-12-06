@@ -1,10 +1,72 @@
+import { Service } from '@/axios/config'
 import { PillButton } from '@/compoenents/PillButton'
-import { items } from '@/pages'
-import Image from 'next/image'
+import { useGlobalsContenxt } from '@/context/GlobalContext'
+
+import jwt from 'jsonwebtoken'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 export const Header = ({ name }: { name: string }) => {
   const { push } = useRouter()
+
+  const [userName, setUsername] = useState('')
+const [image, setImage] = useState('')
+
+
+  useEffect(() => {
+const token = window.localStorage.getItem('token')
+    if (token) {
+      const res: any = jwt.decode(token)
+      if (res)
+      {
+        setUsername(res.name)
+        setImage(res.image)
+      }
+     
+    }
+     const cart = window.localStorage.getItem('cart')
+     if (cart && cart.length > 0) {
+       setSelectedItems(JSON.parse(cart))
+     }
+  }, [])
+
+
+
+ 
+  
+
+const {
+  Cart: [selectedItems, setSelectedItems],
+} = useGlobalsContenxt()
+  
+  
+  
+  
+  const placeOrder = async () => {
+    const token = window.localStorage.getItem('token')
+    if (token && token.length > 0) {
+      const { name, email, phone } = jwt.decode(token) as any
+      if (selectedItems.length > 0) {
+        const res = await Service.post(
+          '/order/add',
+          { cart: selectedItems, name, email, contact: phone + '#', address: 'PWD' },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              authorization: 'Bearer ' + window.localStorage.getItem('token'),
+            },
+          }
+        )
+
+        push('/success' + '?invoice=' + res.data.invoice)
+      }
+    }
+  }
+  
+   useEffect(() => {
+       window.localStorage.setItem('cart', JSON.stringify(selectedItems)), [selectedItems]
+   }, [selectedItems])
+
   return (
     <div
       className='bg-white mx-auto relative flex items-center justify-center w-full'
@@ -28,7 +90,7 @@ export const Header = ({ name }: { name: string }) => {
                 borderRadius: '60px',
               }}
             >
-              Cart <span className='font-bold'>(3/5)</span>
+              Cart <span className='font-bold'>({selectedItems.length}/5)</span>
             </div>
             <div className='hidden peer-hover:flex hover:flex absolute py-2'>
               <div
@@ -37,13 +99,19 @@ export const Header = ({ name }: { name: string }) => {
                 style={{ minWidth: '230px', padding: '17px' }}
               >
                 <div className='flex flex-col '>
-                  {items.slice(0, 5).map((I) => (
+                  {selectedItems.map((I) => (
                     <div style={{ marginTop: '10px' }}>
-                      <CheckoutListItem key='1' name={I.name} />
+                      <CheckoutListItem
+                        key='1'
+                        name={I.title}
+                        onClick={() =>
+                          setSelectedItems(selectedItems.filter((l) => I._id !== l._id))
+                        }
+                      />
                     </div>
                   ))}
                   <div className='flex justify-center' style={{ marginTop: '12px' }}>
-                    <PillButton name='Place Order' onClick={() => push('/success')} />
+                    <PillButton name='Place Order' onClick={() => placeOrder()} />
                   </div>
                 </div>
               </div>
@@ -63,23 +131,12 @@ export const Header = ({ name }: { name: string }) => {
             Past Orders
           </div>
 
-          <div
-            style={{
-              backgroundColor: '#ECEDEE',
-              borderRadius: '100%',
-              height: '40px',
-              width: '40px',
-            }}
-            className='flex justify-center items-center'
-          >
-            <Image src='/assets/images/plus.svg' height={25} width={25} alt='' />
-          </div>
           <div>
             <div className='peer relative'>
               <div className='flex justify-center items-center '>
-                <Image src='/assets/images/profile.svg' height={40} width={40} alt='' />
+                <img src={image} height={40} width={40} alt='' />
                 <div className='flex flex-col ml-3 '>
-                  <div className='text-base'>John Doe</div>
+                  <div className='text-base'>{userName}</div>
                   <div className='text-xs'>Profile Details</div>
                 </div>
               </div>
@@ -93,10 +150,21 @@ export const Header = ({ name }: { name: string }) => {
               >
                 <div className='flex flex-col '>
                   <div className='text-sm font-medium'>Profile Setting</div>
-                  <div className='text-sm font-medium' style={{ marginTop: '11px' }}>
+                  <div
+                    className='text-sm font-medium'
+                    style={{ marginTop: '11px' }}
+                    onClick={() => push('pastOrders')}
+                  >
                     Order History
                   </div>
-                  <div className='text-sm font-medium' style={{ marginTop: '11px' }}>
+                  <div
+                    className='text-sm font-medium'
+                    style={{ marginTop: '11px' }}
+                    onClick={() => {
+                      window.localStorage.removeItem('token')
+                      push('/login')
+                    }}
+                  >
                     Logout
                   </div>
                 </div>
@@ -109,16 +177,16 @@ export const Header = ({ name }: { name: string }) => {
   )
 }
 
-export const CheckoutListItem = ({ name }: {  name: string }) => {
+export const CheckoutListItem = ({ name, onClick }: {  name: string, onClick:any }) => {
   return (
     <div className='bg-white flex items-center justify-between px-2 w-full'>
       <div className='flex'>
         <div>
           <div className='text-base font-medium'>{name}</div>
-          <div style={{ color: '#858585', fontSize: '10px' }}>4 - 6</div>
+          <div style={{ color: '#858585', fontSize: '10px' }}>1</div>
         </div>
       </div>
-      <div className='cursor-pointer w-5 h-5 bg-red-500 flex items-center justify-center rounded-full'>
+      <div className='cursor-pointer w-5 h-5 bg-red-500 flex items-center justify-center rounded-full' onClick={onClick}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'

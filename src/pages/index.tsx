@@ -5,128 +5,13 @@ import Carousel from '@/compoenents/Slider'
 import { useEffect, useState } from 'react'
 import { Service } from '@/axios/config'
 import { useQuery } from 'react-query'
-
-
-
-export const items = [
-  {
-    image: '0777 1 (0).png',
-    name: 'Lemon',
-    key: '1',
-  },
-  {
-    image: '0777 1 (1).png',
-    name: 'Apple',
-    key: '2',
-  },
-  {
-    image: '0777 1 (2).png',
-    name: 'Apple Juice',
-    key: '3',
-  },
-  {
-    image: '0777 1 (3).png',
-    name: 'Apple Sauce',
-    key: '4',
-  },
-  {
-    image: '0777 1 (4).png',
-    name: 'Appricot',
-    key: '5',
-  },
-  {
-    image: '0777 1 (5).png',
-    name: 'Banana',
-    key: '6',
-  },
-  {
-    image: '0777 1 (6).png',
-    name: 'Blackberries',
-    key: '7',
-  },
-  {
-    image: '0777 1 (7).png',
-    name: 'Blueberries',
-    key: '8',
-  },
-  {
-    image: '0777 1 (8).png',
-    name: 'Cantaloupe',
-    key: '9',
-  },
-  {
-    image: '0777 1 (9).png',
-    name: 'Cherries - dried',
-    key: '119',
-  },
-  {
-    image: '0777 1 (10).png',
-    name: 'Coconut',
-    key: '10',
-  },
-  {
-    image: '0777 1 (0).png',
-    name: 'Lemon',
-    key: '11',
-  },
-  {
-    image: '0777 1 (1).png',
-    name: 'Apple',
-    key: '12',
-  },
-  {
-    image: '0777 1 (2).png',
-    name: 'Apple Juice',
-    key: '13',
-  },
-  {
-    image: '0777 1 (3).png',
-    name: 'Apple Sauce',
-    key: '14',
-  },
-  {
-    image: '0777 1 (4).png',
-    name: 'Appricot',
-    key: '15',
-  },
-  {
-    image: '0777 1 (5).png',
-    name: 'Banana',
-    key: '16',
-  },
-  {
-    image: '0777 1 (6).png',
-    name: 'Blackberries',
-    key: '17',
-  },
-  {
-    image: '0777 1 (7).png',
-    name: 'Blueberries',
-    key: '18',
-  },
-  {
-    image: '0777 1 (8).png',
-    name: 'Cantaloupe',
-    key: '19',
-  },
-  {
-    image: '0777 1 (9).png',
-    name: 'Cherries - dried',
-    key: '20',
-  },
-  {
-    image: '0777 1 (10).png',
-    name: 'Coconut',
-    key: '21',
-  },
-]
-
+import { useGlobalsContenxt } from '@/context/GlobalContext'
 
 
 const useCategory = () => {
   return useQuery('Categories',async () => {
     const data = await Service.get('/category')
-    return JSON.parse(data.data)
+    return data.data
   })
 }
 
@@ -135,18 +20,76 @@ const useProducts = (parent:string|undefined) => {
     const data = await Service.get('/products/cat',{params:{
       parent
     }})
-    return JSON.parse(data.data)
+    return data.data
   },{enabled: !!parent})
+}
+
+export function similarity(s1: string, s2: string) {
+  var longer = s1
+  var shorter = s2
+  if (s1.length < s2.length) {
+    longer = s2
+    shorter = s1
+  }
+  var longerLength: number = longer.length
+  if (longerLength == 0) {
+    return 1.0
+  }
+  return (longerLength - editDistance(longer, shorter)!) / longerLength
+}
+
+function editDistance(s1: string, s2: string) {
+  s1 = s1.toLowerCase()
+  s2 = s2.toLowerCase()
+  var costs = new Array<number>()
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0) costs[j] = j
+      else {
+        if (j > 0) {
+           var newValue = costs[j - 1]
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue!, lastValue), costs[j]!) + 1
+          costs[j - 1] = lastValue
+          lastValue = newValue as any
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue
+  }
+  return costs[s2.length]
 }
 
 const Index = () => {
   const { push } = useRouter()
-  const {data:Categories} = useCategory()
- 
+  const { data: Categories } = useCategory()
+  
+  const {Cart:[selectedItems, setSelectedItems]} = useGlobalsContenxt()
+
+
   const [selectedCategory, setSelectedCategory] = useState()
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
-   const { data: Products } = useProducts(selectedCategory)
+  const [search , setSearch]  = useState('')
+
+  const { data: Products } = useProducts(selectedCategory)
+
+  useEffect(() => {
+    const cart = window.localStorage.getItem('cart')
+    if (cart && cart.length > 0)
+    {
+         setSelectedItems( JSON.parse(cart))
+    }
+ 
+  }, [])
+  
+  useEffect(() => {
+    window.localStorage.setItem('cart', JSON.stringify(selectedItems))
+      , [selectedItems]
+  })
+  
+  useEffect(() => { if(!window.localStorage.getItem('token')) push('/login')})
+  
 
 
   useEffect(() => {
@@ -163,6 +106,8 @@ const Index = () => {
           <div className='text-4xl font-semibold'>Food Categories</div>
           <input
             type='text'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder='Search Food Items... '
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
@@ -188,24 +133,29 @@ const Index = () => {
             className='grid grid-cols-5 place-items-stretch gap-10'
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
-            {Products?.map((I:any) => {
+            {Products?.filter(
+          (v:any) =>
+            v.title.toLowerCase().replace('-', '').replace("'", '').includes(search.toLowerCase()) ||
+            similarity(v.title.toLowerCase(), search.toLowerCase()) > 0.5 ||
+            search === '',
+        ).map((I:any) => {
               return (
                 <ListingItem
                   image={I.image}
-                  selected={selectedItems.includes(I._id)}
+                  selected={!!selectedItems.find((l) => I._id === l._id)}
                   key={I._id}
                   name={I.title}
                   onClick={() => {
-                    selectedItems.includes(I._id)
-                      ? setSelectedItems(selectedItems.filter((F) => F !== I._id))
-                      : setSelectedItems([...selectedItems, I._id])
+                    !!selectedItems.find((l) => I._id === l._id)
+                      ? setSelectedItems(selectedItems.filter((F) => F._id !== I._id))
+                      : setSelectedItems([...selectedItems, I])
                   }}
                 />
               )
             })}
           </div>
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
-            <PillButton name='Card(3/5) - Place Order' onClick={() => push('complete')} />
+            <PillButton name={`Card(${selectedItems.length}/5) - Place Order`} onClick={() => push('complete')} />
           </div>
         </div>
       </div>
@@ -247,7 +197,7 @@ type ListingItemProps = {
 const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
   return (
     <div
-      className='bg-white h-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer'
+      className={`bg-white h-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer hover:border border-blue-100 ${selected && 'border'} `}
       style={{ height: '197px', padding: '13px' }}
       onClick={onClick}
     >
