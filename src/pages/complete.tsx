@@ -49,11 +49,11 @@ const CompleteOrder = () => {
             contact: phone,
             address: address,
             shippingOption: self ? 'Self Pickup' : 'Delivery',
+            token: window.localStorage.getItem('token'),
           },
           {
             headers: {
               'Content-Type': 'application/json',
-              authorization: 'Bearer ' + window.localStorage.getItem('token'),
             },
           }
         )

@@ -25,7 +25,7 @@ const Success = () => {
           </div>
           <div className='flex flex-col gap-y-4 text-base' style={{ marginTop: '11px' }}>
             We appreciate your order, we're currently processing it. So hang tight and we'll send
-            you confirmation very soon!
+            you confirmation very soon!yarn 
           </div>
 
           <div
