@@ -134,7 +134,13 @@ const {
           <div>
             <div className='peer relative'>
               <div className='flex justify-center items-center '>
-                <img src={image} height={40} width={40} alt='' />
+                <img
+                  src={image}
+                  height={40}
+                  width={40}
+                  alt=''
+                  className='border rounded-full h-10 w-10 object-cover'
+                />
                 <div className='flex flex-col ml-3 '>
                   <div className='text-base'>{userName}</div>
                   <div className='text-xs'>Profile Details</div>
