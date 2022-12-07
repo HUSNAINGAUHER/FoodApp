@@ -22,7 +22,7 @@ const useLogin = (email?:string, password?: string, image?:string, name?:string,
         },
         'lfjfjasjfsdfsfr09ri09wfsdfsdfrilfdjdj'
       )
-      const data = await Service.post(`/user/register/token`,{email: email, password: password,image:image, name, token})
+      const data = await Service.post(`/user/register/token`,{email: email, password: password, token})
       return data.data
     },
     { enabled: !!email && !!password }
