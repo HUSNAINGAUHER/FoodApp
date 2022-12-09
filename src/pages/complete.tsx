@@ -52,7 +52,6 @@ const CompleteOrder = () => {
     if (token && token.length > 0) {
       console.log(jwt.decode(token))
       const { name, email, phone, address } = jwt.decode(token) as any
-      console.log(address)
       if (selectedItems.length > 0) {
         try {
           const res = await Service.post(
@@ -72,6 +71,8 @@ const CompleteOrder = () => {
               },
             }
           )
+
+          setSelectedItems([])
           push('/success' + '?invoice=' + res.data.invoice)
         }
         catch (err) { setLoad(false) }
