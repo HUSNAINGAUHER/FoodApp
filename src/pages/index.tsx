@@ -24,6 +24,23 @@ const useProducts = (parent:string|undefined) => {
   },{enabled: !!parent})
 }
 
+export const useDistribution = () => {
+  return useQuery(
+    ['Distribution'],
+    async () => {
+      const data = await Service.get('/distribution/currentDistribution')
+      return data.data
+    }
+  )
+}
+
+export const useNext = () => {
+  return useQuery(['Distribution1'], async () => {
+    const data = await Service.get('/distribution/nextDistribution')
+    return data.data
+  })
+}
+
 export function similarity(s1: string, s2: string) {
   var longer = s1
   var shorter = s2
@@ -70,7 +87,11 @@ const Index = () => {
 
   const [selectedCategory, setSelectedCategory] = useState()
 
-  const [search , setSearch]  = useState('')
+  const [search, setSearch] = useState('')
+  
+  const { data: dist } = useDistribution()
+  const { data:next} = useNext()
+   const limit = dist && dist.length > 0 ? dist[0].limit : 0
 
   const { data: Products } = useProducts(selectedCategory)
 
@@ -99,9 +120,16 @@ const Index = () => {
     }
   }, [Categories])
 
+ 
   return (
     <Page name='Dashboard'>
       <div className='mt-0'>
+        <div className='p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 mt-5'>
+          <span className='font-medium mr-10'>Current Distribution End Date!</span>
+          {dist && dist.length > 0 && new Date(dist[0].end).toISOString().slice(0, 10)}
+          <span className='font-medium mx-10'>Next Distribution Start Date!</span>{' '}
+          {next && next.length > 0 && new Date(next[0].start).toISOString().slice(0, 10)}
+        </div>
         <div className='flex justify-between items-center' style={{ paddingTop: '65px' }}>
           <div className='text-4xl font-semibold'>Food Categories</div>
           <input
@@ -112,20 +140,21 @@ const Index = () => {
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
         </div>
-        {Categories &&
-        <Carousel>
-          {Categories?.map((C: any) => (
-            <CarouselItem
-              name={C.parent}
-              image={C.icon}
-              key={C.parent}
-              selected={C.parent === selectedCategory}
-              onClick={() => {
-                setSelectedCategory(C.parent)
-              }}
-            />
-          ))}
-        </Carousel>}
+        {Categories && (
+          <Carousel>
+            {Categories?.map((C: any) => (
+              <CarouselItem
+                name={C.parent}
+                image={C.icon}
+                key={C.parent}
+                selected={C.parent === selectedCategory}
+                onClick={() => {
+                  setSelectedCategory(C.parent)
+                }}
+              />
+            ))}
+          </Carousel>
+        )}
 
         <div style={{ marginTop: '48px' }}>
           <div className='text-4xl font-semibold'>Fruits</div>
@@ -134,11 +163,15 @@ const Index = () => {
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
             {Products?.filter(
-          (v:any) =>
-            v.title.toLowerCase().replace('-', '').replace("'", '').includes(search.toLowerCase()) ||
-            similarity(v.title.toLowerCase(), search.toLowerCase()) > 0.5 ||
-            search === '',
-        ).map((I:any) => {
+              (v: any) =>
+                v.title
+                  .toLowerCase()
+                  .replace('-', '')
+                  .replace("'", '')
+                  .includes(search.toLowerCase()) ||
+                similarity(v.title.toLowerCase(), search.toLowerCase()) > 0.5 ||
+                search === ''
+            ).map((I: any) => {
               return (
                 <ListingItem
                   image={I.image}
@@ -148,6 +181,8 @@ const Index = () => {
                   onClick={() => {
                     !!selectedItems.find((l) => I._id === l._id)
                       ? setSelectedItems(selectedItems.filter((F) => F._id !== I._id))
+                      : selectedItems.length >= limit
+                      ? alert('Can not add more items')
                       : setSelectedItems([...selectedItems, I])
                   }}
                 />
@@ -155,7 +190,10 @@ const Index = () => {
             })}
           </div>
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
-            <PillButton name={`Card(${selectedItems.length}/5) - Place Order`} onClick={() => push('complete')} />
+            <PillButton
+              name={`Card(${selectedItems.length}/${limit}) - Place Order`}
+              onClick={() => push('complete')}
+            />
           </div>
         </div>
       </div>

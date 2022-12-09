@@ -1,6 +1,6 @@
-import { Service } from '@/axios/config'
-import { PillButton } from '@/compoenents/PillButton'
+
 import { useGlobalsContenxt } from '@/context/GlobalContext'
+import { useDistribution } from '@/pages'
 
 import jwt from 'jsonwebtoken'
 import { useRouter } from 'next/router'
@@ -42,26 +42,8 @@ const {
   
   
   
-  const placeOrder = async () => {
-    const token = window.localStorage.getItem('token')
-    if (token && token.length > 0) {
-      const { name, email, phone } = jwt.decode(token) as any
-      if (selectedItems.length > 0) {
-        const res = await Service.post(
-          '/order/add',
-          { cart: selectedItems, name, email, contact: phone + '#', address: 'PWD' },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              authorization: 'Bearer ' + window.localStorage.getItem('token'),
-            },
-          }
-        )
-
-        push('/success' + '?invoice=' + res.data.invoice)
-      }
-    }
-  }
+  const { data: dist } = useDistribution()
+  const limit = dist && dist.length > 0 ? dist[0].limit : 0
   
    useEffect(() => {
        window.localStorage.setItem('cart', JSON.stringify(selectedItems)), [selectedItems]
@@ -90,32 +72,34 @@ const {
                 borderRadius: '60px',
               }}
             >
-              Cart <span className='font-bold'>({selectedItems.length}/5)</span>
+              Cart{' '}
+              <span className='font-bold'>
+                ({selectedItems.length}/{limit})
+              </span>
             </div>
-            <div className='hidden peer-hover:flex hover:flex absolute py-2'>
-              <div
-                className='w-[200px]
+            {selectedItems.length ? (
+              <div className='hidden peer-hover:flex hover:flex absolute py-2'>
+                <div
+                  className='w-[200px]
          flex-col bg-white drop-shadow-lg border-blue-100 border rounded-lg transition-all duration-1000'
-                style={{ minWidth: '230px', padding: '17px' }}
-              >
-                <div className='flex flex-col '>
-                  {selectedItems.map((I) => (
-                    <div style={{ marginTop: '10px' }}>
-                      <CheckoutListItem
-                        key='1'
-                        name={I.title}
-                        onClick={() =>
-                          setSelectedItems(selectedItems.filter((l) => I._id !== l._id))
-                        }
-                      />
-                    </div>
-                  ))}
-                  <div className='flex justify-center' style={{ marginTop: '12px' }}>
-                    <PillButton name='Place Order' onClick={() => placeOrder()} />
+                  style={{ minWidth: '230px', padding: '17px' }}
+                >
+                  <div className='flex flex-col '>
+                    {selectedItems.map((I) => (
+                      <div style={{ marginTop: '10px' }}>
+                        <CheckoutListItem
+                          key='1'
+                          name={I.title}
+                          onClick={() =>
+                            setSelectedItems(selectedItems.filter((l) => I._id !== l._id))
+                          }
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
         <div className='flex items-center cursor-pointer gap-[2rem]'>
@@ -155,7 +139,7 @@ const {
                 style={{ padding: '9px 15px' }}
               >
                 <div className='flex flex-col '>
-                  <div className='text-sm font-medium'>Profile Setting</div>
+                  <div className='text-sm font-medium' onClick={() => push('/editProfile')}>Profile Setting</div>
                   <div
                     className='text-sm font-medium'
                     style={{ marginTop: '11px' }}

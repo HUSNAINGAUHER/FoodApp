@@ -1,51 +1,19 @@
+import { Service } from '@/axios/config'
+import { useGlobalsContenxt } from '@/context/GlobalContext'
 import { Page } from '@/layouts/Page'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { useQuery } from 'react-query'
 
-const pastOrders = [
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Delivery',
-    status: 'Under Process',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-  {
-    no: 'Order #234234',
-    items: '5 Items',
-    DP: 'Self-Pickup',
-    status: 'Ready',
-  },
-]
+
+export const usePastOrders = () => {
+  return useQuery(['Products'], async () => {
+    const data = await Service.post('/order/', {
+      token: window.localStorage.getItem('token')
+    })
+    return data.data
+  })
+}
 
 const Success = () => {
 
@@ -54,7 +22,21 @@ const Success = () => {
   useEffect(() => {
     if (!window.localStorage.getItem('token')) push('/login')
   })
+
+  const { data: orders } = usePastOrders()
   
+  const {Cart:[cart, setCart]} = useGlobalsContenxt()
+  
+  useEffect(() => {
+    const cart1 = window.localStorage.getItem('cart')
+    if (cart1 && cart1.length > 0) {
+      setCart(JSON.parse(cart1))
+    }
+  }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem('cart', JSON.stringify(cart)), [cart]
+  })
   return (
     <>
       <Page name='Past Orders'>
@@ -77,25 +59,26 @@ const Success = () => {
               <div className='text-sm font-semibold'>Status</div>
               <div className='text-sm font-semibold'>Action</div>
             </div>
-            {pastOrders.map((PO) => (
-              <div
-                className='grid grid-cols-5 gap-5 border-b pb-3'
-                style={{ marginTop: '27px', borderColor: '#E2E2E2' }}
-              >
-                <div className='text-sm font-semibold text-blue-900'>{PO.no}</div>
-                <div className='text-sm '>{PO.items}</div>
-                <div className='text-sm '>{PO.DP}</div>
+            {orders &&
+              orders.orders.map((PO: any) => (
                 <div
-                  className='text-sm '
-                  style={{ color: PO.status !== 'Ready' ? '#F24500' : '#07A32A' }}
+                  className='grid grid-cols-5 gap-5 border-b pb-3'
+                  style={{ marginTop: '27px', borderColor: '#E2E2E2' }}
                 >
-                  {PO.status}
+                  <div className='text-sm font-semibold text-blue-900'>Order# {PO.invoice}</div>
+                  <div className='text-sm '>{PO.cart.length}</div>
+                  <div className='text-sm '>{PO.shippingOption}</div>
+                  <div
+                    className='text-sm '
+                    style={{ color: PO.status !== 'pending' ? '#F24500' : '#07A32A' }}
+                  >
+                    {PO.status}
+                  </div>
+                  <div className='text-sm font-semibold text-blue-900 underline cursor-pointer' onClick={() => { setCart(PO.cart); push('/complete') }}>
+                    View / Re-Order
+                  </div>
                 </div>
-                <div className='text-sm font-semibold text-blue-900 underline cursor-pointer'>
-                  View / Re-Order
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </Page>
