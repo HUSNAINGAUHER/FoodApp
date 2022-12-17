@@ -192,7 +192,7 @@ const Index = () => {
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
             <PillButton
               name={`Card(${selectedItems.length}/${limit}) - Place Order`}
-              onClick={() => push('complete')}
+              onClick={() =>selectedItems.length && push('complete')}
             />
           </div>
         </div>

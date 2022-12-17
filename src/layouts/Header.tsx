@@ -64,7 +64,7 @@ const {
           <div>
             <div
               className='peer text-blue-300 flex justify-center items-center w-max h-min py-2 px-2 cursor-pointer'
-              onClick={() => push('complete')}
+              onClick={() => selectedItems.length >0 && push('complete')}
               style={{
                 backgroundColor: '#EFFFEC',
                 fontSize: '12px',
@@ -72,7 +72,7 @@ const {
                 borderRadius: '60px',
               }}
             >
-              Cart{' '}
+              Cart
               <span className='font-bold'>
                 ({selectedItems.length}/{limit})
               </span>

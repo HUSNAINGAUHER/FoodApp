@@ -19,8 +19,13 @@ const CompleteOrder = () => {
   useEffect(() => {
    
     const cart = window.localStorage.getItem('cart')
-    if (cart && cart.length > 0) {
+  
+    if (cart && JSON.parse(cart).length > 0) {
       setSelectedItems(JSON.parse(cart))
+    }
+    else{
+      console.log('klsdjksl')
+      push('/')
     }
   }, [])
 
