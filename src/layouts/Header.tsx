@@ -51,20 +51,20 @@ const {
 
   return (
     <div
-      className='bg-white mx-auto relative flex items-center justify-center w-full'
+      className='bg-white mx-auto relative flex items-center justify-center w-full  md:block'
       style={{ minHeight: '72px' }}
     >
-      <div className='flex items-center justify-between' style={{ width: '1400px' }}>
+      <div className='flex items-center justify-between max-w-[1400px]'>
         <div className='flex items-center gap-[2rem]'>
-          <div className='text-6xl font-bold cursor-pointer' onClick={() => push('/')}>
+          <div className='text-base md:text-6xl font-bold cursor-pointer' onClick={() => push('/')}>
             Heavens<span className='text-blue-100'>Table</span>.
           </div>
-          <div className='text-[#F3F3F3] text-5xl'>/</div>
-          <div>{name}</div>
+          <div className='text-[#F3F3F3] text-5xl md:block hidden'>/</div>
+          <div className='md:block hidden'>{name}</div>
           <div>
             <div
               className='peer text-blue-300 flex justify-center items-center w-max h-min py-2 px-2 cursor-pointer'
-              onClick={() => selectedItems.length >0 && push('complete')}
+              onClick={() => selectedItems.length > 0 && push('complete')}
               style={{
                 backgroundColor: '#EFFFEC',
                 fontSize: '12px',
@@ -102,7 +102,7 @@ const {
             ) : null}
           </div>
         </div>
-        <div className='flex items-center cursor-pointer gap-[2rem]'>
+        <div className='flex items-center cursor-pointer gap-[2rem] '>
           <div
             style={{
               color: '#005AE0',
@@ -110,6 +110,7 @@ const {
               fontWeight: 600,
               fontSize: '16px',
             }}
+            className='md:block hidden'
             onClick={() => push('pastOrders')}
           >
             Past Orders
@@ -139,7 +140,9 @@ const {
                 style={{ padding: '9px 15px' }}
               >
                 <div className='flex flex-col '>
-                  <div className='text-sm font-medium' onClick={() => push('/editProfile')}>Profile Setting</div>
+                  <div className='text-sm font-medium' onClick={() => push('/editProfile')}>
+                    Profile Setting
+                  </div>
                   <div
                     className='text-sm font-medium'
                     style={{ marginTop: '11px' }}

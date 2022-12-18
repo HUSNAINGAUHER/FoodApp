@@ -61,7 +61,7 @@ const Login = () => {
         </div>
        
 
-        <div style={{ width: '450px', marginTop: '36px', padding: '14px 28px' }}>
+        <div style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }} className='md:w-[450px]'>
           <div className='text-5xl font-bold'>Account Sign Login</div>
           <div className='text-base' style={{ marginTop: '5px' }}>
             Username or Email

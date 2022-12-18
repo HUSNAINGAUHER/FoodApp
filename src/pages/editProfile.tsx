@@ -91,12 +91,12 @@ const SignUp = () => {
 
   return (
     <Page name=''>
-      <div className='flex flex-col items-center '>
+      <div className='flex flex-col items-center'>
         <div className='text-6xl font-bold'>
           Heavens<span className='text-blue-100'>Table</span>
         </div>
 
-        <div style={{ width: '450px', marginTop: '36px', padding: '14px 28px' }}>
+        <div style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }} className='md:w-[450px]'>
           <div className='text-5xl font-bold'>Edit Profile</div>
 
           <div className='text-base' style={{ marginTop: '5px' }}>

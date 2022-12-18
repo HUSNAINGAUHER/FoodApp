@@ -94,8 +94,8 @@ const CompleteOrder = () => {
     <>
       <Page name='Place Order'>
         <div
-          style={{ marginTop: '70px', width: '600px', paddingBottom: '48px' }}
-          className='bg-white mx-auto px-20 py-5 rounded-lg'
+          style={{ marginTop: '70px', maxWidth: '600px', paddingBottom: '48px' }}
+          className='bg-white mx-auto px-2 md:px-20 py-5 rounded-lg md:w-[600px]'
         >
           <div className='text-4xl font-semibold'>Complete Your Order</div>
           <div className='flex flex-col gap-y-4' style={{ marginTop: '22px' }}>

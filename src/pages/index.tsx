@@ -123,18 +123,19 @@ const Index = () => {
  
   return (
     <Page name='Dashboard'>
-      <div className='mt-0'>
-        <div className='p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 mt-5'>
-          <span className='font-medium mr-10'>Current Distribution End Date!</span>
+      <div className='mt-0 '>
+        <div className='p-4 mb-4 text-sm text-green-700 bg-green-100 items-center rounded-lg dark:bg-green-200 dark:text-green-800 mt-5 grid grid-cols-2 md:grid-cols-4 gap-5 '>
+          <span className='font-medium mx-10'>Current Distribution End Date!</span>
           {dist && dist.length > 0 && new Date(dist[0].end).toISOString().slice(0, 10)}
           <span className='font-medium mx-10'>Next Distribution Start Date!</span>{' '}
           {next && next.length > 0 && new Date(next[0].start).toISOString().slice(0, 10)}
         </div>
-        <div className='flex justify-between items-center' style={{ paddingTop: '65px' }}>
+        <div className='flex justify-between items-center flex-wrap ' style={{ paddingTop: '65px' }}>
           <div className='text-4xl font-semibold'>Food Categories</div>
           <input
             type='text'
             value={search}
+            className='min-w-[200px]'
             onChange={(e) => setSearch(e.target.value)}
             placeholder='Search Food Items... '
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
@@ -159,7 +160,7 @@ const Index = () => {
         <div style={{ marginTop: '48px' }}>
           <div className='text-4xl font-semibold'>Fruits</div>
           <div
-            className='grid grid-cols-5 place-items-stretch gap-10'
+            className='grid md:grid-cols-5 grid-cols-1 sm:grid-cols-2 place-items-center md:place-item-stretch md:gap-10 gap-3'
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
             {Products?.filter(
@@ -192,7 +193,7 @@ const Index = () => {
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
             <PillButton
               name={`Card(${selectedItems.length}/${limit}) - Place Order`}
-              onClick={() =>selectedItems.length && push('complete')}
+              onClick={() => selectedItems.length && push('complete')}
             />
           </div>
         </div>
@@ -235,7 +236,7 @@ type ListingItemProps = {
 const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
   return (
     <div
-      className={`bg-white h-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer hover:border border-blue-100 ${selected && 'border'} `}
+      className={`bg-white h-max w-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer hover:border border-blue-100 ${selected && 'border'} `}
       style={{ height: '197px', padding: '13px' }}
       onClick={onClick}
     >
@@ -246,7 +247,7 @@ const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
         width={200}
         alt=''
       />
-      <div className='flex justify-between items-center w-full' style={{ marginTop: '16px' }}>
+      <div className='flex justify-between items-center w-full gap-x-2' style={{ marginTop: '16px' }}>
         <div className='font-base'>{name}</div>
         <div className='cursor-pointer'>
           {!selected ? (

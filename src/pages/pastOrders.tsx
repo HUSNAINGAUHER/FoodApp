@@ -42,15 +42,15 @@ const Success = () => {
       <Page name='Past Orders'>
         <div
           style={{ marginTop: '70px', paddingBottom: '48px' }}
-          className='bg-white mx-auto px-20 py-5 rounded-lg w-max'
+          className='bg-white mx-auto px-2 md:px-20 py-5 rounded-lg w-max w-auto'
         >
           <div className='text-4xl font-semibold' style={{ marginTop: '98px' }}>
             Past Orders
           </div>
 
-          <div style={{ marginTop: '25px' }}>
+          <div style={{ marginTop: '25px' }} className='overflow-scroll'>
             <div
-              className='grid grid-cols-5 gap-10 border-b pb-3'
+              className='grid grid-cols-5 gap-10 border-b pb-3 w-max'
               style={{ borderColor: '#E2E2E2' }}
             >
               <div className='text-sm font-semibold'>Order #</div>
@@ -62,7 +62,7 @@ const Success = () => {
             {orders &&
               orders.orders.map((PO: any) => (
                 <div
-                  className='grid grid-cols-5 gap-5 border-b pb-3'
+                  className='grid grid-cols-5 gap-5 border-b pb-3 w-max'
                   style={{ marginTop: '27px', borderColor: '#E2E2E2' }}
                 >
                   <div className='text-sm font-semibold text-blue-900'>Order# {PO.invoice}</div>

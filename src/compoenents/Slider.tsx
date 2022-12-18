@@ -20,7 +20,7 @@ const Carousel = ({ children }: IProps) => {
   const [currentSlide, setCurrentSlide] = React.useState(0)
 
   const activeSlide = (
-    <div className='grid grid-cols-8 place-items-center w-full'>
+    <div className='grid grid-cols-2 md:grid-cols-8 place-items-center w-full gap-y-10'>
       {children.slice(currentSlide, currentSlide + 8)}
     </div>
   )

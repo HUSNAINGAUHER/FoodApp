@@ -17,8 +17,8 @@ const Success = () => {
     <>
       <Page name='Place Order'>
         <div
-          style={{ marginTop: '70px', width: '600px', paddingBottom: '48px' }}
-          className='bg-white mx-auto px-20 py-5 rounded-lg text-center'
+          style={{ marginTop: '70px', maxWidth: '600px', paddingBottom: '48px' }}
+          className='bg-white mx-auto px-20 py-5 rounded-lg text-center md:w-[600px] w-full'
         >
           <div className='text-4xl font-semibold' style={{ marginTop: '98px' }}>
             Thank You
