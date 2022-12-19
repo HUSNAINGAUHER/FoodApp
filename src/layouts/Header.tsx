@@ -51,12 +51,12 @@ const {
 
   return (
     <div
-      className='bg-white mx-auto relative flex items-center justify-center w-full  md:block'
+      className='bg-white mx-auto relative flex items-center justify-center'
       style={{ minHeight: '72px' }}
     >
-      <div className='flex items-center justify-between max-w-[1400px]'>
+      <div className='flex items-center justify-between max-w-[1400px] w-full' >
         <div className='flex items-center gap-[2rem]'>
-          <div className='text-base md:text-6xl font-bold cursor-pointer' onClick={() => push('/')}>
+          <div className='text-2xl md:text-6xl font-bold cursor-pointer' onClick={() => push('/')}>
             Heavens<span className='text-blue-100'>Table</span>.
           </div>
           <div className='text-[#F3F3F3] text-5xl md:block hidden'>/</div>
@@ -102,7 +102,7 @@ const {
             ) : null}
           </div>
         </div>
-        <div className='flex items-center cursor-pointer gap-[2rem] '>
+        <div className='flex items-center cursor-pointer gap-[2rem] justify-between'>
           <div
             style={{
               color: '#005AE0',
@@ -118,7 +118,7 @@ const {
 
           <div>
             <div className='peer relative'>
-              <div className='flex justify-center items-center '>
+              <div className='flex justify-end md:justify-center items-center'>
                 <img
                   src={image}
                   height={40}

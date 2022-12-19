@@ -96,7 +96,7 @@ const SignUp = () => {
           Heavens<span className='text-blue-100'>Table</span>
         </div>
 
-        <div style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }} className='md:w-[450px]'>
+        <div style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }} className='md:w-[450px] w-full'>
           <div className='text-5xl font-bold'>Edit Profile</div>
 
           <div className='text-base' style={{ marginTop: '5px' }}>

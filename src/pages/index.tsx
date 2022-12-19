@@ -130,7 +130,10 @@ const Index = () => {
           <span className='font-medium mx-10'>Next Distribution Start Date!</span>{' '}
           {next && next.length > 0 && new Date(next[0].start).toISOString().slice(0, 10)}
         </div>
-        <div className='flex justify-between items-center flex-wrap ' style={{ paddingTop: '65px' }}>
+        <div
+          className='flex justify-between items-center flex-wrap '
+          style={{ paddingTop: '65px' }}
+        >
           <div className='text-4xl font-semibold'>Food Categories</div>
           <input
             type='text'
@@ -141,26 +144,42 @@ const Index = () => {
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
         </div>
-        {Categories && (
-          <Carousel>
-            {Categories?.map((C: any) => (
-              <CarouselItem
-                name={C.parent}
-                image={C.icon}
-                key={C.parent}
-                selected={C.parent === selectedCategory}
-                onClick={() => {
-                  setSelectedCategory(C.parent)
-                }}
-              />
-            ))}
-          </Carousel>
-        )}
+        <div className='hidden md:block'>
+          {Categories && (
+            <Carousel>
+              {Categories?.map((C: any) => (
+                <CarouselItem
+                  name={C.parent}
+                  image={C.icon}
+                  key={C.parent}
+                  selected={C.parent === selectedCategory}
+                  onClick={() => {
+                    setSelectedCategory(C.parent)
+                  }}
+                />
+              ))}
+            </Carousel>
+          )}
+        </div>
+
+        <div className='md:hidden block flex overflow-x-scroll gap-5 mt-5 overflow-y-hidden'>
+          {Categories?.map((C: any) => (
+            <CarouselItem
+              name={C.parent}
+              image={C.icon}
+              key={C.parent}
+              selected={C.parent === selectedCategory}
+              onClick={() => {
+                setSelectedCategory(C.parent)
+              }}
+            />
+          ))}
+        </div>
 
         <div style={{ marginTop: '48px' }}>
           <div className='text-4xl font-semibold'>Fruits</div>
           <div
-            className='grid md:grid-cols-5 grid-cols-1 sm:grid-cols-2 place-items-center md:place-item-stretch md:gap-10 gap-3'
+            className='grid md:grid-cols-5 grid-cols-2 sm:grid-cols-2 place-items-center md:place-item-stretch md:gap-10 gap-5'
             style={{ rowGap: '25px', marginTop: '25px' }}
           >
             {Products?.filter(
@@ -211,7 +230,7 @@ type Props = {
 const CarouselItem = ({ image, name, selected, onClick }: Props) => {
   return (
     <div
-      className={`bg-white w-max h-max flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
+      className={`bg-white w-max min-w-[120px] h-max flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
         selected && 'border border-blue-100'
       }`}
       style={{ width: '125px', height: '98px' }}
@@ -236,7 +255,7 @@ type ListingItemProps = {
 const ListingItem = ({ image, name, selected, onClick }: ListingItemProps) => {
   return (
     <div
-      className={`bg-white h-max w-max flex flex-col items-center justify-center text-center rounded-xl cursor-pointer hover:border border-blue-100 ${selected && 'border'} `}
+      className={`bg-white h-max w-full flex flex-col items-center justify-center text-center rounded-xl cursor-pointer hover:border border-blue-100 ${selected && 'border'} `}
       style={{ height: '197px', padding: '13px' }}
       onClick={onClick}
     >
