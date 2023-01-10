@@ -1,6 +1,6 @@
 import { Service } from '@/axios/config'
 import { Button } from '@/compoenents/Button'
-import { Page } from '@/layouts/Page'
+
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
