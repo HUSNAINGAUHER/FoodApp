@@ -1,11 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
-});
+})
 
 module.exports = withBundleAnalyzer({
   eslint: {
     dirs: ['.'],
+  },
+  env: {
+    API_URL: process.env.API_URL,
   },
   poweredByHeader: false,
   trailingSlash: true,
@@ -14,4 +17,4 @@ module.exports = withBundleAnalyzer({
   // So, the source code is "basePath-ready".
   // You can remove `basePath` if you don't need it.
   reactStrictMode: true,
-});
+})
