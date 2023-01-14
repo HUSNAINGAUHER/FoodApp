@@ -124,11 +124,13 @@ const Login = () => {
             </div>
           )}
 
-          {!isLoading && isError && user?.status === 401 ? (
-            <div className='mt-5 text-red-500'>Incorrect Username or password</div>
-          ) : (
-            <div className='mt-5 text-red-500'>Your Valification is Pending</div>
-          )}
+          {!isLoading &&
+            isError &&
+            (user?.status === 401 ? (
+              <div className='mt-5 text-red-500'>Incorrect Username or password</div>
+            ) : (
+              <div className='mt-5 text-red-500'>Your Valification is Pending</div>
+            ))}
 
           <div className=' mt-10'>
             <a
