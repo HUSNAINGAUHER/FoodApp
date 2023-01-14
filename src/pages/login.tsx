@@ -35,8 +35,6 @@ const Login = () => {
     if (user?.data?.token) {
       window.localStorage.setItem('token', user.data?.token)
       push('/')
-    } else {
-      isError && user?.status === 401 ? alert('UnAuthorized') : alert('User not Verified')
     }
   }, [isLoading])
 
@@ -124,6 +122,12 @@ const Login = () => {
               </svg>
               <span className='sr-only'>Loading...</span>
             </div>
+          )}
+
+          {!isLoading && isError && user?.status === 401 ? (
+            <div className='mt-5 text-red-500'>Incorrect Username or password</div>
+          ) : (
+            <div className='mt-5 text-red-500'>Your Valification is Pending</div>
           )}
 
           <div className=' mt-10'>
