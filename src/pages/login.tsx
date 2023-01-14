@@ -15,9 +15,10 @@ const useLogin = (email?: string, password?: string) => {
         registerEmail: email,
         password: password,
       })
-      return data.data
+
+      return data
     },
-    { enabled: !!email && !!password }
+    { enabled: !!email && !!password, retry: 0 }
   )
 }
 
@@ -28,14 +29,14 @@ const Login = () => {
 
   const [cred, setCred] = useState<{ email: string; password: string } | undefined>(undefined)
 
-  const { data: user, isLoading, isError } = useLogin(cred?.email, cred?.password)
+  const { data: user, isLoading, isError, error } = useLogin(cred?.email, cred?.password)
 
   useEffect(() => {
-    if (user?.token) {
-      window.localStorage.setItem('token', user?.token)
+    if (user?.data?.token) {
+      window.localStorage.setItem('token', user.data?.token)
       push('/')
     } else {
-      isError && alert('User not Verified')
+      isError && user?.status === 401 ? alert('UnAuthorized') : alert('User not Verified')
     }
   }, [isLoading])
 
