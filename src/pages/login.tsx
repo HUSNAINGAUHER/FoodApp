@@ -29,7 +29,7 @@ const Login = () => {
 
   const [cred, setCred] = useState<{ email: string; password: string } | undefined>(undefined)
 
-  const { data: user, isLoading, isError, error } = useLogin(cred?.email, cred?.password)
+  const { data: user, isLoading, isError } = useLogin(cred?.email, cred?.password)
 
   useEffect(() => {
     if (user?.data?.token) {
