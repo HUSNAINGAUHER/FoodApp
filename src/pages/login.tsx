@@ -29,7 +29,9 @@ const Login = () => {
 
   const [cred, setCred] = useState<{ email: string; password: string } | undefined>(undefined)
 
-  const { data: user, isLoading, isError } = useLogin(cred?.email, cred?.password)
+  const { data: user, isLoading, isError, error } = useLogin(cred?.email, cred?.password)
+
+  const respose = error as any
 
   useEffect(() => {
     if (user?.data?.token) {
@@ -126,7 +128,7 @@ const Login = () => {
 
           {!isLoading &&
             isError &&
-            (user?.status === 401 ? (
+            (respose?.response?.status === 401 ? (
               <div className='mt-5 text-red-500'>Incorrect Username or password</div>
             ) : (
               <div className='mt-5 text-red-500'>Your Valification is Pending</div>
