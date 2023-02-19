@@ -20,10 +20,14 @@ const Carousel = ({ children }: IProps) => {
   const [currentSlide, setCurrentSlide] = React.useState(0)
 
   const activeSlide = (
-    <div className='grid grid-cols-2 md:grid-cols-8 place-items-center w-full gap-y-10'>
-      {children.slice(currentSlide, currentSlide + 8)}
+    <div className='grid grid-cols-2 md:grid-cols-6 place-items-center w-full gap-y-10'>
+      {children.slice(currentSlide, currentSlide + 6)}
     </div>
   )
+
+  React.useEffect(() => {
+    console.log(currentSlide)
+  },[currentSlide])
 
   return (
     <div style={{marginTop:'44px'}}>
@@ -38,7 +42,7 @@ const Carousel = ({ children }: IProps) => {
               stroke='currentColor'
               className='w-6 h-6'
               onClick={() => {
-                setCurrentSlide((currentSlide - 1 + children.length) % (children.length - 8))
+                setCurrentSlide((currentSlide - 2 + children.length) % (children.length - 6))
               }}
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
@@ -54,7 +58,7 @@ const Carousel = ({ children }: IProps) => {
               stroke='currentColor'
               className='w-6 h-6'
               onClick={() => {
-                setCurrentSlide((currentSlide + 1) % (children.length - 8))
+                setCurrentSlide((currentSlide + 1) % (children.length - 6))
               }}
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />

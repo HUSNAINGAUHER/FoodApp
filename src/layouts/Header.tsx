@@ -56,10 +56,10 @@ const {
     >
       <div className='flex items-center justify-between max-w-[1400px] w-full' >
         <div className='flex items-center gap-[2rem]'>
-          <div className='text-2xl md:text-6xl font-bold cursor-pointer' onClick={() => push('/')}>
+          <div className='text-2xl md:text-5xl font-bold cursor-pointer' onClick={() => push('/')}>
             Heavens<span className='text-blue-100'>Table</span>.
           </div>
-          <div className='text-[#F3F3F3] text-5xl md:block hidden'>/</div>
+          <div className='text-[#F3F3F3] text-4xl md:block hidden'>/</div>
           <div className='md:block hidden'>{name}</div>
           <div>
             <div
@@ -120,7 +120,7 @@ const {
             <div className='peer relative'>
               <div className='flex justify-end md:justify-center items-center'>
                 <img
-                  src={image}
+                  src={image ? image : '/assets/images/Avatar.png'}
                   height={40}
                   width={40}
                   alt=''
