@@ -10,7 +10,7 @@ import { usePastOrders } from './pastOrders'
 
 
 const CompleteOrder = () => {
-  const { push } = useRouter()
+  const { push,query } = useRouter()
 
   const {
     Cart: [selectedItems, setSelectedItems],
@@ -44,7 +44,7 @@ const CompleteOrder = () => {
   
   const { data: orders } = usePastOrders()
   
-  console.log(orders)
+
   
 
   const isAllowed = () => {
@@ -52,6 +52,13 @@ const CompleteOrder = () => {
   }  
   const placeOrder = async () => {
     
+    if (!isAllowed() && !query._id) {
+      alert('You have already placed order in current distribution')
+      return
+    }
+
+
+
     const token = window.localStorage.getItem('token')
     setLoad(true)
     if (token && token.length > 0) {
@@ -59,26 +66,53 @@ const CompleteOrder = () => {
       const { name, email, phone, address } = jwt.decode(token) as any
       if (selectedItems.length > 0) {
         try {
-          const res = await Service.post(
-            '/order/add',
-            {
-              cart: selectedItems,
-              name,
-              email,
-              contact: phone,
-              address,
-              shippingOption: self,
-              token: window.localStorage.getItem('token'),
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          )
 
-          setSelectedItems([])
-          push('/success' + '?invoice=' + res.data.invoice)
+          if (!query._id) {
+            const res = await Service.post(
+              '/order/add',
+              {
+                cart: selectedItems,
+                name,
+                email,
+                contact: phone,
+                address,
+                shippingOption: self,
+                token: window.localStorage.getItem('token'),
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+          
+
+            setSelectedItems([])
+            push('/success' + '?invoice=' + res.data.invoice)
+          }
+          else {
+
+            const res = await Service.put(
+              `/orders/${query._id}`,
+              {
+                cart: selectedItems,
+                name,
+                email,
+                contact: phone,
+                address,
+                shippingOption: self,
+                token: window.localStorage.getItem('token'),
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+
+            setSelectedItems([])
+            push('/success' + '?invoice=' + res.data.invoice)
+          }
         }
         catch (err) { setLoad(false) }
       }
@@ -128,7 +162,7 @@ const CompleteOrder = () => {
 
           {!load ? (
             <div style={{ marginTop: '36px' }}>
-              <PillButton name='Complete Order' onClick={() => isAllowed() ? placeOrder() : alert('You have already placed order in current distribution')} />
+              <PillButton name={query._id ? 'Update Order':'Place Order'} onClick={() => placeOrder() } />
             </div>
           ) : (
             <div role='status' className='mt-5'>

@@ -7,10 +7,10 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 export const Header = ({ name }: { name: string }) => {
-  const { push } = useRouter()
+  const { push,query } = useRouter()
 
   const [userName, setUsername] = useState('')
-const [image, setImage] = useState('')
+  const [image, setImage] = useState('')
 
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const {
       className='bg-white mx-auto relative flex items-center justify-center'
       style={{ minHeight: '72px' }}
     >
-      <div className='flex items-center justify-between max-w-[1400px] w-full' >
+      <div className='flex items-center justify-between max-w-[1400px] w-full'>
         <div className='flex items-center gap-[2rem]'>
           <div className='text-2xl md:text-5xl font-bold cursor-pointer' onClick={() => push('/')}>
             Heavens<span className='text-blue-100'>Table</span>.
@@ -64,7 +64,7 @@ const {
           <div>
             <div
               className='peer text-blue-300 flex justify-center items-center w-max h-min py-2 px-2 cursor-pointer'
-              onClick={() => selectedItems.length > 0 && push('complete')}
+              onClick={() => selectedItems.length > 0 && push({ pathname: '/complete', query })}
               style={{
                 backgroundColor: '#EFFFEC',
                 fontSize: '12px',
@@ -115,7 +115,20 @@ const {
           >
             Past Orders
           </div>
-
+          {userName === 'admin' && (
+            <div
+              style={{
+                color: '#005AE0',
+                textDecoration: 'underline',
+                fontWeight: 600,
+                fontSize: '16px',
+              }}
+              className='md:block hidden'
+              onClick={() => window.location.replace('https://admin.shelfly.io/')}
+            >
+              Admin Dashboard
+            </div>
+          )}
           <div>
             <div className='peer relative'>
               <div className='flex justify-end md:justify-center items-center'>
@@ -143,6 +156,7 @@ const {
                   <div className='text-sm font-medium' onClick={() => push('/editProfile')}>
                     Profile Setting
                   </div>
+
                   <div
                     className='text-sm font-medium'
                     style={{ marginTop: '11px' }}

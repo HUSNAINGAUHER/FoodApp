@@ -7,6 +7,9 @@ import { Service } from '@/axios/config'
 import { useQuery } from 'react-query'
 import { useGlobalsContenxt } from '@/context/GlobalContext'
 
+import jwt from 'jsonwebtoken'
+
+
 
 const useCategory = () => {
   return useQuery('Categories',async () => {
@@ -24,6 +27,18 @@ const useProducts = (parent:string|undefined) => {
   },{enabled: !!parent})
 }
 
+function titleCase(string:string) {
+  let sentence = string.toLowerCase().split(' ')
+  for (let i = 0; i < sentence.length; i++) {
+    const d = sentence[i]
+    if (d) {
+      
+      sentence[i] = d[0]?.toUpperCase() + d.slice(1)
+    }
+  }
+ 
+  return sentence
+}
 const useAllProducts = (search:string|undefined) => {
   return useQuery(
     ['ProductsAll',search],
@@ -31,7 +46,7 @@ const useAllProducts = (search:string|undefined) => {
       
       const data = await Service.get('/products', {
         params: {
-          title: search,
+          title: titleCase(search||'')
         },
       })
       return data.data.products
@@ -94,10 +109,12 @@ function editDistance(s1: string, s2: string) {
 }
 
 const Index = () => {
-  const { push } = useRouter()
+  const { push,query } = useRouter()
   const { data: Categories } = useCategory()
   
-  const {Cart:[selectedItems, setSelectedItems]} = useGlobalsContenxt()
+  const { Cart: [selectedItems, setSelectedItems] } = useGlobalsContenxt()
+  
+  
 
 
   const [selectedCategory, setSelectedCategory] = useState()
@@ -108,7 +125,7 @@ const Index = () => {
   const { data:next} = useNext()
    const limit = dist && dist.length > 0 ? dist[0].limit : 0
 
-  const { data: Products } = useProducts(selectedCategory)
+  const { data: Products, isLoading } = useProducts(selectedCategory)
   const { data: AllProducts ,isLoading: productsLoading} = useAllProducts(search)
 
 
@@ -126,7 +143,13 @@ const Index = () => {
       , [selectedItems]
   })
   
-  useEffect(() => { if(!window.localStorage.getItem('token')) push('/login')})
+  useEffect(() => { if (!window.localStorage.getItem('token')) push('/login') })
+
+ 
+    
+  
+
+  
   
 
 
@@ -137,6 +160,46 @@ const Index = () => {
     }
   }, [Categories])
 
+
+  const GetCategoryLimit = (cat:string, limit:number) => {
+
+   return limit - selectedItems.filter((s) => s.parent === cat).length
+
+  }
+
+  const AddtoCart = (product: any) => {
+
+    if (selectedItems.find((l) => product._id === l._id))
+    {
+      setSelectedItems(selectedItems.filter((F) => F._id !== product._id))
+      return 
+    }
+
+    const { parent } = product
+    const _limit = Categories?.find((c: any) => c.parent === parent).limit
+
+   
+    const d = GetCategoryLimit(parent, _limit)
+    console.log(d)
+   
+
+    if (GetCategoryLimit(parent, _limit) > 0 || !!!_limit) {
+      const I = product
+
+      selectedItems.length >= limit
+        ? alert('Can not add more items')
+        : setSelectedItems([...selectedItems, I])
+    }
+    // alert('noori I love you :)')ß
+    
+
+    
+    
+    // const no=  (limit - selectedItems.filter((s) => s.parent === cat).length)
+  }
+
+
+  
  
   return (
     <Page name='Dashboard'>
@@ -164,11 +227,23 @@ const Index = () => {
         <div className='hidden md:block'>
           {Categories && (
             <Carousel>
-              {Categories?.map((C: any) => (
+              {Categories.filter((C:any) => {
+                  const token = window.localStorage.getItem('token')
+                if (token && token.length > 0) {
+                  console.log(jwt.decode(token))
+                  const { baby } = jwt.decode(token) as any
+
+                  if (C.baby)
+                    return baby
+                  else return true
+                }
+              })?.map((C: any) => (
                 <CarouselItem
                   name={C.parent}
                   image={C.icon}
                   key={C.parent}
+                  baby={C.baby}
+                  limit={GetCategoryLimit(C.parent, C.limit)}
                   selected={C.parent === selectedCategory}
                   onClick={() => {
                     setSelectedCategory(C.parent)
@@ -193,21 +268,31 @@ const Index = () => {
           ))}
         </div>
 
-        {/* .filter(
-              (v: any) =>
-                v.title
-                  .toLowerCase()
-                  .replace('-', '')
-                  .replace("'", '')
-                  .includes(search.toLowerCase()) ||
-                similarity(v.title.toLowerCase(), search.toLowerCase()) > 0.5 ||
-                search === ''
-            ) */}
-
         <div style={{ marginTop: '48px' }}>
           {!search && (
             <>
               <div className='text-4xl font-semibold'>{selectedCategory}</div>
+              {isLoading && (
+                <div className='w-full flex justify-center mt-5 '>
+                  <svg
+                    aria-hidden='true'
+                    className='w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 '
+                    viewBox='0 0 100 101'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
+                      fill='currentColor'
+                    />
+                    <path
+                      d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
+                      fill='currentFill'
+                    />
+                  </svg>
+                  <span className='sr-only'>Loading...</span>
+                </div>
+              )}
               <div
                 className='grid md:grid-cols-5 grid-cols-2 sm:grid-cols-2 place-items-center md:place-item-stretch md:gap-10 gap-5'
                 style={{ rowGap: '25px', marginTop: '25px' }}
@@ -220,11 +305,7 @@ const Index = () => {
                       key={I._id}
                       name={I.title}
                       onClick={() => {
-                        !!selectedItems.find((l) => I._id === l._id)
-                          ? setSelectedItems(selectedItems.filter((F) => F._id !== I._id))
-                          : selectedItems.length >= limit
-                          ? alert('Can not add more items')
-                          : setSelectedItems([...selectedItems, I])
+                        AddtoCart(I)
                       }}
                     />
                   )
@@ -307,7 +388,9 @@ const Index = () => {
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
             <PillButton
               name={`Card(${selectedItems.length}/${limit}) - Place Order`}
-              onClick={() => selectedItems.length && push('complete')}
+              onClick={() =>
+                selectedItems.length && push({pathname:'/complete',query})
+              }
             />
           </div>
         </div>
@@ -321,21 +404,46 @@ type Props = {
   name: string
   onClick?: () => void
   selected: boolean
+  baby?: boolean
+  limit?: number
 }
-const CarouselItem = ({ image, name, selected, onClick }: Props) => {
+const CarouselItem = ({ image, name, selected, onClick , baby, limit}: Props) => {
   return (
     <div
-      className={`bg-white w-max min-w-[120px] p-[15px] h-[120px] w-[180px] flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
+      className={`relative bg-white w-max min-w-[120px] p-[15px] h-[120px] w-[180px] flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
         selected && 'border border-blue-100'
-        
       }`}
-     
       onClick={onClick}
     >
       <img src={image} height={40} width={40} alt='' />
       <div className='font-sm font-medium' style={{ marginTop: '11px' }}>
         {name}
       </div>
+      {baby && (
+        <div className='absolute bottom-2 right-2'>
+          <div className='relative'>
+            <img
+              src={
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGjNNsSotiVGYPFhwcOP30hP7zjHLlu87mYw&usqp=CAU'
+              }
+              height={20}
+              width={20}
+              alt=''
+            />
+          </div>
+        </div>
+      )}
+      {limit !== 0 &&(
+        <div className='absolute bottom-2 left-2'>
+          <div className='relative text-xs text-green-500'>limit : {limit ? limit : '∞'}</div>
+        </div>
+      )}
+      
+      {limit === 0 &&(
+        <div className='absolute bottom-2 left-2'>
+          <div className='relative text-xs text-red-500'>limit reached</div>
+        </div>
+      )}
     </div>
   )
 }

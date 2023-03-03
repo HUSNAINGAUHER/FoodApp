@@ -14,10 +14,11 @@ const useLogin = (
   phone?: string,
   address?: string,
   zip?: string,
-  id?: string
+  id?: string,
+  baby?:boolean
 ) => {
   return useQuery(
-    ['add', email, password, image, address, zip, id, image],
+    ['add', email, password, image, address, zip, id, image, baby],
     async () => {
       const token = {
         password: password,
@@ -28,9 +29,9 @@ const useLogin = (
         zipCode: zip,
         image: image,
         verified: false,
+        baby
       }
 
-      console.log(token)
       const data = await Service.post(`/user/register/1`, {
         token: jwt.sign(token, 'lfjfjasjfsdfsfr09ri09wfsdfsdfrilfdjdj'),
       })
@@ -49,6 +50,8 @@ const SignUp = () => {
   const [zip, setZip] = useState<string | undefined>(undefined)
   const [err, setError] = useState<any>(undefined)
   const [image, setImage] = useState<any>(undefined)
+  const [baby, setBaby] = useState<boolean>(false)
+
 
   const [cred, setCred] = useState<
     | {
@@ -59,7 +62,8 @@ const SignUp = () => {
         name: string
         address: string
         zip: string
-        id: string
+      id: string
+        baby: boolean
       }
     | undefined
   >(undefined)
@@ -72,7 +76,8 @@ const SignUp = () => {
     cred?.phone,
     cred?.address,
     cred?.zip,
-    cred?.id
+    cred?.id,
+    cred?.baby
   )
 
   const convertBase64 = (file: any) => {
@@ -197,6 +202,19 @@ const SignUp = () => {
 
         <input style={{ marginTop: '20px' }} type='file' onChange={(e) => uploadImage(e)} />
 
+        <div className='text-base' style={{ marginTop: '17px' }}>
+          Do you have babies?
+        </div>
+        <div>
+          <input
+            style={{ marginTop: '5px' }}
+            type='checkbox'
+            className='h-5 p-2 border border-grey-100 border-2 focus:border-gray-900 '
+            onChange={(e) => setBaby(e.target.checked)}
+            checked={baby}
+          />
+        </div>
+
         {err && <div className='text-red-500 mt-2'>{err}</div>}
 
         {!isLoading ? (
@@ -213,6 +231,7 @@ const SignUp = () => {
                     name: name,
                     address,
                     zip,
+                    baby,
                     id: 'abc',
                   })
                 } else {

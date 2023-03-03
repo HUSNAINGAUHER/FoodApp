@@ -49,34 +49,53 @@ const Success = () => {
           </div>
 
           <div style={{ marginTop: '25px' }} className='overflow-scroll'>
-            <div
-              className='grid grid-cols-5 gap-10 border-b pb-3 w-max'
-              style={{ borderColor: '#E2E2E2' }}
-            >
-              <div className='text-sm font-semibold'>Order #</div>
-              <div className='text-sm font-semibold'>Items Ordered</div>
-              <div className='text-sm font-semibold'>Delivery/Pickup</div>
-              <div className='text-sm font-semibold'>Status</div>
-              <div className='text-sm font-semibold'>Action</div>
-            </div>
+            
             {orders &&
-              orders.orders.map((PO: any) => (
+              orders.orders.map((PO: any, index: number) => (
                 <div
-                  className='grid grid-cols-5 gap-5 border-b pb-3 w-max'
+                  className='grid grid-cols-5 gap-10 border-b pb-3 w-max'
                   style={{ marginTop: '27px', borderColor: '#E2E2E2' }}
                 >
+                  {index === 0 && (
+                    <>
+                     
+                      <div className='text-sm font-semibold'>Order #</div>
+                      <div className='text-sm font-semibold'>Items Ordered</div>
+                      <div className='text-sm font-semibold'>Delivery/Pickup</div>
+                      <div className='text-sm font-semibold'>Status</div>
+                      <div className='text-sm font-semibold'>Action</div>
+                    </>
+                  )}
                   <div className='text-sm font-semibold text-blue-900'>Order# {PO.invoice}</div>
                   <div className='text-sm '>{PO.cart.length}</div>
                   <div className='text-sm '>{PO.shippingOption}</div>
                   <div
                     className='text-sm '
-                    style={{ color: PO.status !== 'pending' ? '#F24500' : '#07A32A' }}
+                    style={{ color: PO.status === 'Pending' ? '#F24500' : '#07A32A' }}
                   >
                     {PO.status}
                   </div>
-                  <div className='text-sm font-semibold text-blue-900 underline cursor-pointer' onClick={() => { setCart(PO.cart); push('/complete') }}>
-                    View / Re-Order
-                  </div>
+                  {PO.status === 'Pending' ? (
+                    <div
+                      className='text-sm font-semibold text-blue-900 underline cursor-pointer'
+                      onClick={() => {
+                        setCart(PO.cart)
+                        push('/?_id='+PO._id)
+                      }}
+                    >
+                      Edit Order
+                    </div>
+                  ) : (
+                    <div
+                      className='text-sm font-semibold text-blue-900 underline cursor-pointer'
+                      onClick={() => {
+                        setCart(PO.cart)
+                        push('/complete')
+                      }}
+                    >
+                      View / Re-Order
+                    </div>
+                  )}
                 </div>
               ))}
           </div>

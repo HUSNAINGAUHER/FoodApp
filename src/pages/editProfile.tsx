@@ -6,7 +6,7 @@ import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import jwt from 'jsonwebtoken'
 
-const useLogin = (email?: string, password?: string, image?: string, name?: string, phone?: string, address?: string, zip?: string, id?: string) => {
+const useLogin = (email?: string, password?: string, image?: string, name?: string, phone?: string, address?: string, zip?: string, id?: string,baby?:boolean) => {
   
   console.log(id)
   return useQuery(
@@ -20,7 +20,8 @@ const useLogin = (email?: string, password?: string, image?: string, name?: stri
           name,
           phone,
           address,
-          zipCode: zip
+        zipCode: zip,
+          baby:baby
       }
       
       console.log(token)
@@ -50,13 +51,14 @@ const SignUp = () => {
   const [address, setAddress] = useState<string | undefined>(undefined)
   const [zip, setZip] = useState<string | undefined>(undefined)
   const [err, setError] = useState<any>(undefined)
+   const [baby, setBaby] = useState<boolean>(false)
 
   
   
 
-  const [cred, setCred] = useState<{email:string, password:string, image:string, phone:string,name:string, address:string, zip:string, id: string} | undefined>(undefined)
+  const [cred, setCred] = useState<{email:string, password:string, image:string, phone:string,name:string, address:string, zip:string, id: string, baby?:boolean} | undefined>(undefined)
 
-  const { data: user, isLoading } = useLogin(cred?.email, cred?.password, cred?.image, cred?.name, cred?.phone, cred?.address, cred?.zip, cred?.id) 
+  const { data: user, isLoading } = useLogin(cred?.email, cred?.password, cred?.image, cred?.name, cred?.phone, cred?.address, cred?.zip, cred?.id,cred?.baby) 
   useEffect(() => {
     if (user?.token) {
       window.localStorage.setItem('token', user?.token)
@@ -78,6 +80,7 @@ const SignUp = () => {
       setPhone(user.phone)
       setZip(user.zipCode)
       setAddress(user.address)
+      setBaby(user.baby)
       }
 
     
@@ -96,7 +99,10 @@ const SignUp = () => {
           Heavens<span className='text-blue-100'>Table</span>
         </div>
 
-        <div style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }} className='md:w-[450px] w-full'>
+        <div
+          style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }}
+          className='md:w-[450px] w-full'
+        >
           <div className='text-5xl font-bold'>Edit Profile</div>
 
           <div className='text-base' style={{ marginTop: '5px' }}>
@@ -163,7 +169,18 @@ const SignUp = () => {
             value={zip}
           />
 
-         
+          <div className='text-base' style={{ marginTop: '17px' }}>
+            Do you have babies?
+          </div>
+          <div>
+            <input
+              style={{ marginTop: '5px' }}
+              type='checkbox'
+              className='h-5 p-2 border border-grey-100 border-2 focus:border-gray-900 '
+              onChange={(e) => setBaby(e.target.checked)}
+              checked={baby}
+            />
+          </div>
 
           {err && <div className='text-red-500 mt-2'>{err}</div>}
 
@@ -184,6 +201,7 @@ const SignUp = () => {
                       address,
                       zip,
                       id,
+                      baby
                     })
                   } else {
                     setError('Some Fields are missing')

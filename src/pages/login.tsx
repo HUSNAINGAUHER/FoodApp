@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
-const useLogin = (email?: string, password?: string) => {
+export const useLogin = (email?: string, password?: string) => {
   return useQuery(
     ['Login', email, password],
     async () => {
