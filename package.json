@@ -24,6 +24,9 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.2.0",
+    "i18next": "^22.4.10",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.1.1",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "next": "^13.0.0",
@@ -32,6 +35,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-grid-carousel": "^1.0.1",
+    "react-i18next": "^12.2.0",
     "react-multi-carousel": "^2.8.2",
     "react-query": "^3.39.2",
     "styled-components": "^5.3.6"

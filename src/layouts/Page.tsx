@@ -12,6 +12,8 @@ export const Page = ({
   name: string
 }) => (
   <div style={{ backgroundColor: '#F3F4F5' }} className='pb-10'>
+
+   
     {!background && <Header name={name} />}
     <div
       style={{

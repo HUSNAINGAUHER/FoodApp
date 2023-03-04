@@ -1,10 +1,13 @@
 import { Service } from '@/axios/config'
 import { Button } from '@/compoenents/Button'
+import { useGlobalsContenxt } from '@/context/GlobalContext'
 import { Page } from '@/layouts/Page'
+import {   t } from 'i18next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import { i18n } from './_app'
 
 export const useLogin = (email?: string, password?: string) => {
   return useQuery(
@@ -31,6 +34,16 @@ const Login = () => {
 
   const { data: user, isLoading, isError, error } = useLogin(cred?.email, cred?.password)
 
+  const { Lang: [lang, setLang] } = useGlobalsContenxt()
+  
+   const changeLanguage = (lng: string) => {
+     i18n.changeLanguage(lng)
+     setLang(lng)
+   }
+
+
+  
+
   const respose = error as any
 
   useEffect(() => {
@@ -49,6 +62,27 @@ const Login = () => {
 
   return (
     <Page background name=''>
+      <div className='relative pt-5'>
+
+      <div className='flex float-right absolute right-2'>
+        <div
+          onClick={() => changeLanguage('en')}
+          className={`border p-[5px] border-green-500 cursor-pointer ${
+            lang === 'en' && 'bg-green-400'
+          } hover:bg-green-400 rounded-l-lg`}
+          >
+          English
+        </div>
+        <div
+          onClick={() => changeLanguage('sp')}
+          className={`border p-[5px] border-green-500 cursor-pointer  ${
+            lang === 'sp' && 'bg-green-400'
+          } hover:bg-green-400 rounded-r-lg`}
+          >
+          Spanish
+        </div>
+      </div>
+          </div>
       <div className='flex flex-col items-center '>
         <Image
           src='/assets/images/login.png'
@@ -65,9 +99,9 @@ const Login = () => {
           style={{ maxWidth: '450px', marginTop: '36px', padding: '14px 28px' }}
           className='md:w-[450px]'
         >
-          <div className='text-5xl font-bold'>Account Sign Login</div>
+          <div className='text-5xl font-bold'>{t('Account Sign Login')}</div>
           <div className='text-base' style={{ marginTop: '5px' }}>
-            Username or Email
+            {t('Username or Email')}
           </div>
           <input
             style={{ marginTop: '7px' }}
@@ -77,7 +111,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <div className='text-base' style={{ marginTop: '17px' }}>
-            Password
+            {t('Password')}
           </div>
           <input
             style={{ marginTop: '5px' }}
@@ -87,13 +121,6 @@ const Login = () => {
             value={password}
           />
 
-          <div className='form-check' style={{ marginTop: '16px' }}>
-            <input
-              className='form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-100 checked:border-blue-100 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer'
-              type='checkbox'
-            />
-            <label className='form-check-label inline-block text-gray-800'>Remember me</label>
-          </div>
           {!isLoading ? (
             <div className='w-full' style={{ marginTop: '16px' }}>
               <Button
@@ -129,9 +156,9 @@ const Login = () => {
           {!isLoading &&
             isError &&
             (respose?.response?.status === 401 ? (
-              <div className='mt-5 text-red-500'>Incorrect Username or password</div>
+              <div className='mt-5 text-red-500'> {t('Incorrect Username or password')}</div>
             ) : (
-              <div className='mt-5 text-red-500'>Your Valification is Pending</div>
+              <div className='mt-5 text-red-500'>{t('Your Valification is Pending')}</div>
             ))}
 
           <div className=' mt-10'>
@@ -139,13 +166,13 @@ const Login = () => {
               className='text-gray-900 cursor-pointer decoration-underline'
               onClick={() => push('/signUp')}
             >
-              Don't have account? Sign Up
+              {t(`Don't have account? Sign Up`)}
             </a>
           </div>
 
           <div style={{ marginTop: '72px' }} className='text-center'>
             <a className='text-gray-900 cursor-pointer decoration-underline'>
-              Terms of Service - Privacy Policy
+              {t(`Terms of Service - Privacy Policy`)}
             </a>
           </div>
         </div>

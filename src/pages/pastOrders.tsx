@@ -1,6 +1,7 @@
 import { Service } from '@/axios/config'
 import { useGlobalsContenxt } from '@/context/GlobalContext'
 import { Page } from '@/layouts/Page'
+import { t } from 'i18next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
@@ -45,11 +46,10 @@ const Success = () => {
           className='bg-white mx-auto px-2 md:px-20 py-5 rounded-lg w-max w-auto'
         >
           <div className='text-4xl font-semibold' style={{ marginTop: '98px' }}>
-            Past Orders
+            {t('Past Orders')}
           </div>
 
           <div style={{ marginTop: '25px' }} className='overflow-scroll'>
-            
             {orders &&
               orders.orders.map((PO: any, index: number) => (
                 <div
@@ -58,15 +58,17 @@ const Success = () => {
                 >
                   {index === 0 && (
                     <>
-                     
-                      <div className='text-sm font-semibold'>Order #</div>
-                      <div className='text-sm font-semibold'>Items Ordered</div>
-                      <div className='text-sm font-semibold'>Delivery/Pickup</div>
-                      <div className='text-sm font-semibold'>Status</div>
-                      <div className='text-sm font-semibold'>Action</div>
+                      <div className='text-sm font-semibold'> {t('Order')} #</div>
+                      <div className='text-sm font-semibold'> {t('Items Ordered')}</div>
+                      <div className='text-sm font-semibold'> {t('Delivery/Pickup')}</div>
+                      <div className='text-sm font-semibold'> {t('Status')}</div>
+                      <div className='text-sm font-semibold'> {t('Action')}</div>
                     </>
                   )}
-                  <div className='text-sm font-semibold text-blue-900'>Order# {PO.invoice}</div>
+                  <div className='text-sm font-semibold text-blue-900'>
+                    {' '}
+                    {t('Order')}# {PO.invoice}
+                  </div>
                   <div className='text-sm '>{PO.cart.length}</div>
                   <div className='text-sm '>{PO.shippingOption}</div>
                   <div
@@ -80,10 +82,10 @@ const Success = () => {
                       className='text-sm font-semibold text-blue-900 underline cursor-pointer'
                       onClick={() => {
                         setCart(PO.cart)
-                        push('/?_id='+PO._id)
+                        push('/?_id=' + PO._id)
                       }}
                     >
-                      Edit Order
+                      {t('Edit Order')}
                     </div>
                   ) : (
                     <div
@@ -93,7 +95,7 @@ const Success = () => {
                         push('/complete')
                       }}
                     >
-                      View / Re-Order
+                      {t('View / Re-Order')}
                     </div>
                   )}
                 </div>

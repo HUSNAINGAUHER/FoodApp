@@ -1,6 +1,8 @@
 
 import { useGlobalsContenxt } from '@/context/GlobalContext'
 import { useDistribution } from '@/pages'
+import { i18n } from '@/pages/_app'
+import { t } from 'i18next'
 
 import jwt from 'jsonwebtoken'
 import { useRouter } from 'next/router'
@@ -11,6 +13,7 @@ export const Header = ({ name }: { name: string }) => {
 
   const [userName, setUsername] = useState('')
   const [image, setImage] = useState('')
+ const {Lang:[lang,setLang] }  = useGlobalsContenxt()
 
 
   useEffect(() => {
@@ -30,6 +33,11 @@ const token = window.localStorage.getItem('token')
      }
   }, [])
 
+  const changeLanguage = (lng:string) => {
+    i18n.changeLanguage(lng)
+    setLang(lng)
+
+  }
 
 
  
@@ -60,7 +68,7 @@ const {
             Heavens<span className='text-blue-100'>Table</span>.
           </div>
           <div className='text-[#F3F3F3] text-4xl md:block hidden'>/</div>
-          <div className='md:block hidden'>{name}</div>
+          <div className='md:block hidden'>{t(name)}</div>
           <div>
             <div
               className='peer text-blue-300 flex justify-center items-center w-max h-min py-2 px-2 cursor-pointer'
@@ -72,7 +80,7 @@ const {
                 borderRadius: '60px',
               }}
             >
-              Cart
+              {t('Cart')}
               <span className='font-bold'>
                 ({selectedItems.length}/{limit})
               </span>
@@ -102,6 +110,26 @@ const {
             ) : null}
           </div>
         </div>
+
+        <div className='flex'>
+          <div
+            onClick={() => changeLanguage('en')}
+            className={`border p-[5px] border-green-500 cursor-pointer ${
+              lang === 'en' && 'bg-green-400'
+            } hover:bg-green-400 rounded-l-lg`}
+          >
+            English
+          </div>
+          <div
+            onClick={() => changeLanguage('sp')}
+            className={`border p-[5px] border-green-500 cursor-pointer  ${
+              lang === 'sp' && 'bg-green-400'
+            } hover:bg-green-400 rounded-r-lg`}
+          >
+            Spanish
+          </div>
+        </div>
+
         <div className='flex items-center cursor-pointer gap-[2rem] justify-between'>
           <div
             style={{
@@ -113,7 +141,7 @@ const {
             className='md:block hidden'
             onClick={() => push('pastOrders')}
           >
-            Past Orders
+            {t('Past Orders')}
           </div>
           {userName === 'admin' && (
             <div
@@ -126,7 +154,7 @@ const {
               className='md:block hidden'
               onClick={() => window.location.replace('https://admin.shelfly.io/')}
             >
-              Admin Dashboard
+              {t('Admin Dashboard')}
             </div>
           )}
           <div>
@@ -141,7 +169,7 @@ const {
                 />
                 <div className='flex flex-col ml-3 '>
                   <div className='text-base'>{userName}</div>
-                  <div className='text-xs'>Profile Details</div>
+                  <div className='text-xs'> {t('Profile Details')}</div>
                 </div>
               </div>
             </div>
@@ -154,7 +182,7 @@ const {
               >
                 <div className='flex flex-col '>
                   <div className='text-sm font-medium' onClick={() => push('/editProfile')}>
-                    Profile Setting
+                    {t('Profile Setting')}
                   </div>
 
                   <div
@@ -162,7 +190,7 @@ const {
                     style={{ marginTop: '11px' }}
                     onClick={() => push('pastOrders')}
                   >
-                    Order History
+                    {t('Order History')}
                   </div>
                   <div
                     className='text-sm font-medium'
@@ -172,7 +200,7 @@ const {
                       push('/login')
                     }}
                   >
-                    Logout
+                    {t('Logout')}
                   </div>
                 </div>
               </div>

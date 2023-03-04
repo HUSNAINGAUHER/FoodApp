@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import jwt from 'jsonwebtoken'
 import { useDistribution } from '.'
 import { usePastOrders } from './pastOrders'
+import { t } from 'i18next'
 
 
 const CompleteOrder = () => {
@@ -43,6 +44,8 @@ const CompleteOrder = () => {
    const { data: dist } = useDistribution()
   
   const { data: orders } = usePastOrders()
+ useGlobalsContenxt()
+
   
 
   
@@ -53,7 +56,7 @@ const CompleteOrder = () => {
   const placeOrder = async () => {
     
     if (!isAllowed() && !query._id) {
-      alert('You have already placed order in current distribution')
+      alert(t('You have already placed order in current distribution'))
       return
     }
 
@@ -131,7 +134,7 @@ const CompleteOrder = () => {
           style={{ marginTop: '70px', maxWidth: '600px', paddingBottom: '48px' }}
           className='bg-white mx-auto px-2 md:px-20 py-5 rounded-lg md:w-[600px]'
         >
-          <div className='text-4xl font-semibold'>Complete Your Order</div>
+          <div className='text-4xl font-semibold'>{t('Complete Your Order')}</div>
           <div className='flex flex-col gap-y-4' style={{ marginTop: '22px' }}>
             {selectedItems.map((I) => (
               <CheckoutListItem
@@ -144,10 +147,8 @@ const CompleteOrder = () => {
           </div>
 
           <div className='' style={{ marginTop: '26px' }}>
-            <label
-              className='block mb-2 text-sm font-medium  text-gray-900'
-            >
-              Select an option
+            <label className='block mb-2 text-sm font-medium  text-gray-900'>
+              {t('Select an option')}
             </label>
             <select
               value={self}
@@ -155,14 +156,17 @@ const CompleteOrder = () => {
               id='countries'
               className=' border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             >
-              <option value='Self Pickup'>Pickup Your Self</option>
-              <option value='Delivery'>Deliver to  my address</option>
+              <option value='Self Pickup'>{t('Pickup Your Self')}</option>
+              <option value='Delivery'>{t('Deliver to my address')}</option>
             </select>
           </div>
 
           {!load ? (
             <div style={{ marginTop: '36px' }}>
-              <PillButton name={query._id ? 'Update Order':'Place Order'} onClick={() => placeOrder() } />
+              <PillButton
+                name={query._id ? t('Update Order') : t('Place Order')}
+                onClick={() => placeOrder()}
+              />
             </div>
           ) : (
             <div role='status' className='mt-5'>

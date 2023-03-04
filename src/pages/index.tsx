@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 import { useGlobalsContenxt } from '@/context/GlobalContext'
 
 import jwt from 'jsonwebtoken'
+import { t } from 'i18next'
 
 
 
@@ -178,24 +179,20 @@ const Index = () => {
     const { parent } = product
     const _limit = Categories?.find((c: any) => c.parent === parent).limit
 
+    if (GetCategoryLimit(parent, _limit) <= 0)
+      return
    
-    const d = GetCategoryLimit(parent, _limit)
-    console.log(d)
+   
    
 
-    if (GetCategoryLimit(parent, _limit) > 0 || !!!_limit) {
+    
       const I = product
 
       selectedItems.length >= limit
-        ? alert('Can not add more items')
+        ? alert(t('Can not add more items'))
         : setSelectedItems([...selectedItems, I])
-    }
-    // alert('noori I love you :)')ß
     
-
-    
-    
-    // const no=  (limit - selectedItems.filter((s) => s.parent === cat).length)
+  
   }
 
 
@@ -205,36 +202,35 @@ const Index = () => {
     <Page name='Dashboard'>
       <div className='mt-0 '>
         <div className='p-4 mb-4 text-sm text-green-700 bg-green-100 items-center rounded-lg dark:bg-green-200 dark:text-green-800 mt-5 grid grid-cols-2 md:grid-cols-4 gap-5 '>
-          <span className='font-medium'>Current Distribution End Date!</span>
+          <span className='font-medium'>{t('Current Distribution End Date!')}</span>
           {dist && dist.length > 0 && new Date(dist[0].end).toISOString().slice(0, 10)}
-          <span className='font-medium'>Next Distribution Start Date!</span>{' '}
+          <span className='font-medium'>{t('Next Distribution Start Date!')}</span>{' '}
           {next && next.length > 0 && new Date(next[0].start).toISOString().slice(0, 10)}
         </div>
         <div
           className='flex justify-between items-center flex-wrap '
           style={{ paddingTop: '20px' }}
         >
-          <div className='text-4xl font-semibold'>Food Categories</div>
+          <div className='text-4xl font-semibold'>{t('Food Categories')}</div>
           <input
             type='text'
             value={search}
             className='min-w-[200px]'
             onChange={(e) => setSearch(e.target.value)}
-            placeholder='Search Food Items... '
+            placeholder={t('Search Food Items...') || ''}
             style={{ border: '1px solid #D0D1D7', padding: '9px 25px', borderRadius: '5px ' }}
           />
         </div>
         <div className='hidden md:block'>
           {Categories && (
             <Carousel>
-              {Categories.filter((C:any) => {
-                  const token = window.localStorage.getItem('token')
+              {Categories.filter((C: any) => {
+                const token = window.localStorage.getItem('token')
                 if (token && token.length > 0) {
                   console.log(jwt.decode(token))
                   const { baby } = jwt.decode(token) as any
 
-                  if (C.baby)
-                    return baby
+                  if (C.baby) return baby
                   else return true
                 }
               })?.map((C: any) => (
@@ -316,7 +312,9 @@ const Index = () => {
 
           {search && (
             <>
-              <div className='text-4xl font-semibold'>Search Result : {search}</div>
+              <div className='text-4xl font-semibold'>
+                {t('Search Result')} : {search}
+              </div>
               {productsLoading && (
                 <div className='w-full flex justify-center mt-5 '>
                   <svg
@@ -350,11 +348,7 @@ const Index = () => {
                       key={I._id}
                       name={I.title}
                       onClick={() => {
-                        !!selectedItems.find((l) => I._id === l._id)
-                          ? setSelectedItems(selectedItems.filter((F) => F._id !== I._id))
-                          : selectedItems.length >= limit
-                          ? alert('Can not add more items')
-                          : setSelectedItems([...selectedItems, I])
+                        AddtoCart(I)
                       }}
                     />
                   )
@@ -387,10 +381,8 @@ const Index = () => {
           )}
           <div className='flex justify-end' style={{ marginTop: '44px' }}>
             <PillButton
-              name={`Card(${selectedItems.length}/${limit}) - Place Order`}
-              onClick={() =>
-                selectedItems.length && push({pathname:'/complete',query})
-              }
+              name={`${t('Cart')}(${selectedItems.length}/${limit}) - ${t('Place Order')} `}
+              onClick={() => selectedItems.length && push({ pathname: '/complete', query })}
             />
           </div>
         </div>
@@ -435,13 +427,13 @@ const CarouselItem = ({ image, name, selected, onClick , baby, limit}: Props) =>
       )}
       {limit !== 0 &&(
         <div className='absolute bottom-2 left-2'>
-          <div className='relative text-xs text-green-500'>limit : {limit ? limit : '∞'}</div>
+          <div className='relative text-xs text-green-500'>{t('limit')} : {limit ? limit : '∞'}</div>
         </div>
       )}
       
       {limit === 0 &&(
         <div className='absolute bottom-2 left-2'>
-          <div className='relative text-xs text-red-500'>limit reached</div>
+          <div className='relative text-xs text-red-500'>{t('limit reached')}</div>
         </div>
       )}
     </div>
