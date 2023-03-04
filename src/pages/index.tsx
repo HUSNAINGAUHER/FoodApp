@@ -157,7 +157,18 @@ const Index = () => {
   useEffect(() => {
     if(Categories) 
     {
-      setSelectedCategory(Categories[0].parent)
+      setSelectedCategory(
+        Categories.filter((C: any) => {
+          const token = window.localStorage.getItem('token')
+          if (token && token.length > 0) {
+            console.log(jwt.decode(token))
+            const { baby } = jwt.decode(token) as any
+
+            if (C.baby) return baby
+            else return true
+          }
+        })[0].parent
+      )
     }
   }, [Categories])
 
