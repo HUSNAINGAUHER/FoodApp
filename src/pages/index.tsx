@@ -222,7 +222,7 @@ const Index = () => {
           className='flex justify-between items-center flex-wrap '
           style={{ paddingTop: '20px' }}
         >
-          <div className='text-4xl font-semibold'>{t('Food Categories')}</div>
+          <div className='text-4xl font-semibold my-[5px]'>{t('Food Categories')}</div>
           <input
             type='text'
             value={search}
@@ -413,13 +413,13 @@ type Props = {
 const CarouselItem = ({ image, name, selected, onClick , baby, limit}: Props) => {
   return (
     <div
-      className={`relative bg-white w-max min-w-[120px] p-[15px] h-[120px] w-[180px] flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
+      className={`relative bg-white w-max min-w-[120px] p-[15px]  w-[180px] flex flex-col items-center justify-center text-center rounded-xl hover:border hover:border-blue-100 cursor-pointer ${
         selected && 'border border-blue-100'
       }`}
       onClick={onClick}
     >
       <img src={image} height={40} width={40} alt='' />
-      <div className='font-sm font-medium' style={{ marginTop: '11px' }}>
+      <div className='text-sm font-medium mb-[30px]' style={{ marginTop: '11px' }}>
         {name}
       </div>
       {baby && (

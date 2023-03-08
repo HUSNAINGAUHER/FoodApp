@@ -63,55 +63,56 @@ const {
       style={{ minHeight: '72px' }}
     >
       <div className='flex items-center justify-between max-w-[1400px] w-full'>
-        <div className='flex items-center gap-[2rem]'>
+        <div className='flex items-center gap-[5px]'>
           <div className='text-2xl md:text-5xl font-bold cursor-pointer' onClick={() => push('/')}>
             Heavens<span className='text-blue-100'>Table</span>.
           </div>
           <div className='text-[#F3F3F3] text-4xl md:block hidden'>/</div>
           <div className='md:block hidden'>{t(name)}</div>
-          <div>
-            <div
-              className='peer text-blue-300 flex justify-center items-center w-max h-min py-2 px-2 cursor-pointer'
-              onClick={() => selectedItems.length > 0 && push({ pathname: '/complete', query })}
-              style={{
-                backgroundColor: '#EFFFEC',
-                fontSize: '12px',
-                border: ' 1px solid #07A32A',
-                borderRadius: '60px',
-              }}
-            >
-              {t('Cart')}
-              <span className='font-bold'>
-                ({selectedItems.length}/{limit})
-              </span>
-            </div>
-            {selectedItems.length ? (
-              <div className='hidden peer-hover:flex hover:flex absolute py-2'>
-                <div
-                  className='w-[200px]
-         flex-col bg-white drop-shadow-lg border-blue-100 border rounded-lg transition-all duration-1000'
-                  style={{ minWidth: '230px', padding: '17px' }}
-                >
-                  <div className='flex flex-col '>
-                    {selectedItems.map((I) => (
-                      <div style={{ marginTop: '10px' }}>
-                        <CheckoutListItem
-                          key='1'
-                          name={I.title}
-                          onClick={() =>
-                            setSelectedItems(selectedItems.filter((l) => I._id !== l._id))
-                          }
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </div>
         </div>
 
-        <div className='flex'>
+        <div>
+          <div
+            className='peer text-blue-300 flex justify-center items-center w-max h-min py-1 px-1 cursor-pointer'
+            onClick={() => selectedItems.length > 0 && push({ pathname: '/complete', query })}
+            style={{
+              backgroundColor: '#EFFFEC',
+              fontSize: '9px',
+              border: ' 1px solid #07A32A',
+              borderRadius: '60px',
+            }}
+          >
+            {t('Cart')}
+            <span className='font-bold'>
+              ({selectedItems.length}/{limit})
+            </span>
+          </div>
+          {selectedItems.length ? (
+            <div className='hidden peer-hover:flex hover:flex fixed py-2'>
+              <div
+                className='w-[200px]
+         flex-col bg-white drop-shadow-lg border-blue-100 border rounded-lg transition-all duration-1000'
+                style={{ minWidth: '230px', padding: '17px' }}
+              >
+                <div className='flex flex-col '>
+                  {selectedItems.map((I) => (
+                    <div style={{ marginTop: '10px' }}>
+                      <CheckoutListItem
+                        key='1'
+                        name={I.title}
+                        onClick={() =>
+                          setSelectedItems(selectedItems.filter((l) => I._id !== l._id))
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className='flex hidden md:flex'>
           <div
             onClick={() => changeLanguage('en')}
             className={`border p-[5px] border-green-500 cursor-pointer ${
@@ -130,7 +131,7 @@ const {
           </div>
         </div>
 
-        <div className='flex items-center cursor-pointer gap-[2rem] justify-between'>
+        <div className='flex items-center cursor-pointer gap-[2rem] justify-between md:flex hidden'>
           <div
             style={{
               color: '#005AE0',
@@ -157,51 +158,52 @@ const {
               {t('Admin Dashboard')}
             </div>
           )}
-          <div>
-            <div className='peer relative'>
-              <div className='flex justify-end md:justify-center items-center'>
-                <img
-                  src={image ? image : '/assets/images/Avatar.png'}
-                  height={40}
-                  width={40}
-                  alt=''
-                  className='border rounded-full h-10 w-10 object-cover'
-                />
-                <div className='flex flex-col ml-3 '>
-                  <div className='text-base'>{userName}</div>
-                  <div className='text-xs'> {t('Profile Details')}</div>
-                </div>
+        </div>
+
+        <div>
+          <div className='peer relative'>
+            <div className='flex justify-end md:justify-center items-center'>
+              <img
+                src={image ? image : '/assets/images/Avatar.png'}
+                height={40}
+                width={40}
+                alt=''
+                className='border rounded-full h-10 w-10 object-cover'
+              />
+              <div className='flex flex-col ml-3 '>
+                <div className='text-base'>{userName}</div>
+                <div className='text-xs'> {t('Profile Details')}</div>
               </div>
             </div>
+          </div>
 
-            <div className='hidden peer-hover:block hover:block pt-2 absolute'>
-              <div
-                className=' 
+          <div className='hidden peer-hover:block hover:block pt-2 absolute'>
+            <div
+              className=' 
             flex-col bg-white drop-shadow-lg rounded-lg  border-blue-100 border transition-all duration-1000'
-                style={{ padding: '9px 15px' }}
-              >
-                <div className='flex flex-col '>
-                  <div className='text-sm font-medium' onClick={() => push('/editProfile')}>
-                    {t('Profile Setting')}
-                  </div>
+              style={{ padding: '9px 15px' }}
+            >
+              <div className='flex flex-col '>
+                <div className='text-xs font-medium' onClick={() => push('/editProfile')}>
+                  {t('Profile Setting')}
+                </div>
 
-                  <div
-                    className='text-sm font-medium'
-                    style={{ marginTop: '11px' }}
-                    onClick={() => push('pastOrders')}
-                  >
-                    {t('Order History')}
-                  </div>
-                  <div
-                    className='text-sm font-medium'
-                    style={{ marginTop: '11px' }}
-                    onClick={() => {
-                      window.localStorage.removeItem('token')
-                      push('/login')
-                    }}
-                  >
-                    {t('Logout')}
-                  </div>
+                <div
+                  className='text-sm font-medium'
+                  style={{ marginTop: '11px' }}
+                  onClick={() => push('pastOrders')}
+                >
+                  {t('Order History')}
+                </div>
+                <div
+                  className='text-sm font-medium'
+                  style={{ marginTop: '11px' }}
+                  onClick={() => {
+                    window.localStorage.removeItem('token')
+                    push('/login')
+                  }}
+                >
+                  {t('Logout')}
                 </div>
               </div>
             </div>
