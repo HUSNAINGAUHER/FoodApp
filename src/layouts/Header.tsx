@@ -59,7 +59,7 @@ const {
 
   return (
     <div
-      className='bg-white mx-auto relative flex items-center justify-center'
+      className='bg-white mx-auto relative flex items-center justify-center px-[5px]'
       style={{ minHeight: '72px' }}
     >
       <div className='flex items-center justify-between max-w-[1400px] w-full'>

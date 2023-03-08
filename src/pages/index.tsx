@@ -390,7 +390,7 @@ const Index = () => {
               )}
             </>
           )}
-          <div className='flex justify-end' style={{ marginTop: '44px' }}>
+          <div className='flex justify-end fixed md:relative bottom-2 right-2' style={{ marginTop: '44px' }}>
             <PillButton
               name={`${t('Cart')}(${selectedItems.length}/${limit}) - ${t('Place Order')} `}
               onClick={() => selectedItems.length && push({ pathname: '/complete', query })}

@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 
 
 export const usePastOrders = () => {
+  console.log('jskjd')
   return useQuery(['Products'], async () => {
     const data = await Service.post('/order/', {
       token: window.localStorage.getItem('token')
