@@ -88,7 +88,7 @@ const {
             </span>
           </div>
           {selectedItems.length ? (
-            <div className='hidden peer-hover:flex hover:flex fixed py-2'>
+            <div className='hidden peer-hover:flex hover:flex fixed z-20 py-2 '>
               <div
                 className='w-[200px]
          flex-col bg-white drop-shadow-lg border-blue-100 border rounded-lg transition-all duration-1000'

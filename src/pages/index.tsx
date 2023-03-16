@@ -158,16 +158,19 @@ const Index = () => {
     if(Categories) 
     {
       setSelectedCategory(
-        Categories.filter((C: any) => {
+        Categories.filter((c:any) => c.status === 'Show').filter((C: any) => {
           const token = window.localStorage.getItem('token')
           if (token && token.length > 0) {
-            console.log(jwt.decode(token))
             const { baby } = jwt.decode(token) as any
 
             if (C.baby) return baby
             else return true
           }
         })[0].parent
+      )
+
+      console.log(
+        Categories
       )
     }
   }, [Categories])
@@ -238,13 +241,13 @@ const Index = () => {
               {Categories.filter((C: any) => {
                 const token = window.localStorage.getItem('token')
                 if (token && token.length > 0) {
-                  console.log(jwt.decode(token))
                   const { baby } = jwt.decode(token) as any
 
                   if (C.baby) return baby
                   else return true
                 }
-              })?.map((C: any) => (
+              })?.filter((a:any) => a.status === 'Show')
+            ?.map((C: any) => (
                 <CarouselItem
                   name={C.parent}
                   image={C.icon}
@@ -262,7 +265,7 @@ const Index = () => {
         </div>
 
         <div className='md:hidden block flex overflow-x-scroll gap-5 mt-5 overflow-y-hidden'>
-          {Categories?.map((C: any) => (
+          {Categories?.filter((a:any) => a.status === 'Show')?.map((C: any) => (
             <CarouselItem
               name={C.parent}
               image={C.icon}
