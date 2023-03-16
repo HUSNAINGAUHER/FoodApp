@@ -51,7 +51,8 @@ const CompleteOrder = () => {
   
 
   const isAllowed = () => {
-    return !orders?.orders.find((order:any) =>  order.createdAt > dist[0]?.start &&  order.createdAt < dist[0]?.end )
+    
+    return !orders?.orders.find((order:any) =>  order.createdAt >= dist[0]?.start &&  order.createdAt <= dist[0]?.end )
   }  
   const placeOrder = async () => {
     
@@ -117,7 +118,11 @@ const CompleteOrder = () => {
             push('/success' + '?invoice=' + res.data.invoice)
           }
         }
-        catch (err) { setLoad(false) }
+        catch (err) {
+          window.localStorage.removeItem('token')
+          push('/login')
+          setLoad(false)
+        }
       }
     }
     else {
